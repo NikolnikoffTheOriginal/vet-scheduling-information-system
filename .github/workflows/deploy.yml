@@ -1,4 +1,4 @@
-name: Deploy React Application to Pages
+name: Deploy tactics-genius to Pages
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.4.x
+          node-version: 20.9.x
           cache: npm
 
       - name: Install dependencies
