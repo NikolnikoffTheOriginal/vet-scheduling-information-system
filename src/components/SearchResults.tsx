@@ -1,4 +1,3 @@
-import React from "react";
 import { SearchResult } from "./SearchResult";
 
 export const SearchResults = ({ searchResults }: any) => {

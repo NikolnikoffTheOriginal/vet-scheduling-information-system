@@ -1,11 +1,10 @@
-import React from "react";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa"
 
-export const SearchBar = ({ SetSearchResults }) => {
+export const SearchBar = ({ SetSearchResults }: any) => {
     const [searchValue, setSearchValue] = useState('');
 
-    const fetchData = (value: string) => {
+    const fetchData = (_value: string) => {
         const options = {
             method: 'GET',
             headers: {
@@ -19,6 +18,7 @@ export const SearchBar = ({ SetSearchResults }) => {
             .then(response => response.json())
             .then(response => console.log(response))
             .catch(err => console.error(err));
+            console.log(SetSearchResults);
     }
 
     const handleChange = (value: string) => {
