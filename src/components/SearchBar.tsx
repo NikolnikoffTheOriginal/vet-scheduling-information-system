@@ -1,26 +1,17 @@
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa"
+import { db } from "../database/db";
 
 export const SearchBar = ({ SetSearchResults }) => {
     const [searchValue, setSearchValue] = useState('');
 
     const fetchData = (value: string) => {
-        const options = {
-            method: 'GET',
-            headers: {
-                'X-Auth-Token': '60aae18d99384f6e82c2e4ad7946e6f1',
-            },
-        }
-
-        fetch('/api/competitions/2021/teams', options)
-            .then((response) => response.json())
-            .then((data) => {
-                const results = data.teams.filter((team: { name: string; }) => {
-                    return (value && team && team.name && team.name.toLowerCase().includes(value.toLowerCase()));
-                })
-                SetSearchResults(results);
+        db.cachedData.toArray().then((data: any[]) => {
+            const filteredData = data.filter((team) => {
+                return value && team && team.name && team.name.toLowerCase().includes(value.toLocaleLowerCase())
             })
-
+            SetSearchResults(filteredData);
+        })
     }
 
     const handleChange = (value: string) => {
