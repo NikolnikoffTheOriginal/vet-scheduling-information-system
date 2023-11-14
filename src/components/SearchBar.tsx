@@ -15,6 +15,7 @@ export const SearchBar = ({ SetSearchResults }: any) => {
             .then(response => response.json())
             .then(response => console.log(response))
             .catch(err => console.error(err));
+            console.log(SetSearchResults)
     }
 
     const handleChange = (value: string) => {
