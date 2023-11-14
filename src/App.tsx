@@ -5,6 +5,7 @@ import { SearchResults } from "./components/SearchResults";
 import { LoginForm } from "./components/LoginForm";
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { TeamsList } from "./components/TeamsList";
 
 export enum UserForm {
   Login = 'Login',
@@ -47,6 +48,9 @@ function App() {
         </div>
       </div>
       <LoginForm userForm={userForm} />
+      <div>
+        <TeamsList />
+      </div>
     </div>
   )
 }

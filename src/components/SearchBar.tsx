@@ -6,7 +6,7 @@ export const SearchBar = ({ SetSearchResults }) => {
     const [searchValue, setSearchValue] = useState('');
 
     const fetchData = (value: string) => {
-        db.cachedData.toArray().then((data: any[]) => {
+        db.teams.toArray().then((data: any[]) => {
             const filteredData = data.filter((team) => {
                 return value && team && team.name && team.name.toLowerCase().includes(value.toLocaleLowerCase())
             })
