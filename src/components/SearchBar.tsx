@@ -5,20 +5,16 @@ export const SearchBar = ({ SetSearchResults }: any) => {
     const [searchValue, setSearchValue] = useState('');
 
     const fetchData = (_value: string) => {
-        const options = {
+        fetch('/api/teams', {
             method: 'GET',
             headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization',
-                'X-Auth-Token': '60aae18d99384f6e82c2e4ad7946e6f1'
-            }
-        }
-        fetch('https://api.football-data.org/v4/matches', options)
+                'X-Auth-Token': '60aae18d99384f6e82c2e4ad7946e6f1',
+            },
+        })
 
             .then(response => response.json())
             .then(response => console.log(response))
             .catch(err => console.error(err));
-            console.log(SetSearchResults);
     }
 
     const handleChange = (value: string) => {
