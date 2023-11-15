@@ -2,11 +2,11 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa"
 import { db } from "../database/db";
 
-export const SearchBar = ({ SetSearchResults }) => {
+export const SearchBar = ({ SetSearchResults }: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
     const [searchValue, setSearchValue] = useState('');
 
     const fetchData = (value: string) => {
-        db.teams.toArray().then((data: any[]) => {
+        db.teams.toArray().then((data: any[]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
             const filteredData = data.filter((team) => {
                 return value && team && team.name && team.name.toLowerCase().includes(value.toLocaleLowerCase())
             })
