@@ -18,7 +18,7 @@ function App() {
   const [userForm, setUserForm] = useState('');
 
   return (
-    <div className="">
+    <div className="z-0">
       <div className="navbar bg-info">
         <div className="flex-1">
           <a
@@ -48,9 +48,7 @@ function App() {
         </div>
       </div>
       <LoginForm userForm={userForm} />
-      <div>
-        <TeamsList />
-      </div>
+      <TeamsList />
     </div>
   )
 }

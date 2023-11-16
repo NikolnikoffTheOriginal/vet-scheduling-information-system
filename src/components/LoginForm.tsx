@@ -1,7 +1,7 @@
 export const LoginForm = ({ userForm }: any) => {
 
     return (
-        <div className={`${userForm === 'Login' ? "block duration-700 opacity-100 absolute top-1/2 left-1/2 form-translate" : "opacity-0 scale-0"}`}>
+        <div className={`${userForm === 'Login' ? "block duration-700 opacity-100 absolute top-1/2 left-1/2 form-translate z-10" : "opacity-0 scale-0 absolute"}`}>
             <div className="flex justify-center mt-5">
                 <form className="p-16 bg-base-200 rounded-3xl text-center flex flex-wrap w-2/5 h-3/6 justify-center">
                     <h1 className="text-3xl">Sign In</h1>

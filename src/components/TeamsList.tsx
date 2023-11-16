@@ -11,13 +11,28 @@ export const TeamsList = () => {
   }, []);
 
   return (
-    <div className="">
-      {teams.map((team: any) => // eslint-disable-line @typescript-eslint/no-explicit-any
-        <div className="team" key={team.id}>
-          <h2>{team.name}</h2>
-          {/* Include other team data as needed */}
-        </div>
-      )}
+    <div className="w-2/12">
+      <div className="overflow-x-auto">
+        <table className="table">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>Standings</th>
+              <th>Team Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* rows */}
+            {teams.map((team: any, index) => // eslint-disable-line @typescript-eslint/no-explicit-any
+              <tr key={team.id} className="hover">
+                <th>{index + 1}</th>
+                <td>{team.name}</td>
+                {/* Include other team data as needed */}
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

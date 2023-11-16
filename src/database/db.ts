@@ -9,7 +9,7 @@ interface MyDatabase extends Dexie {
 export const db: MyDatabase = new Dexie('MyDatabase') as MyDatabase;
 
 // Define an object store for the cached data
-db.version(2).stores({
+db.version(20).stores({
   teams: 'id'
 });
 
