@@ -1,11 +1,10 @@
 import { useState } from "react"
 import { FaUser } from "react-icons/fa"
-import { SearchBar } from "./components/SearchBar"
-import { SearchResults } from "./components/SearchResults";
 import { LoginForm } from "./components/LoginForm";
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { TeamsList } from "./components/TeamsList";
+import { MatchesList } from "./components/MatchesList";
 
 export enum UserForm {
   Login = 'Login',
@@ -14,7 +13,6 @@ export enum UserForm {
 }
 
 function App() {
-  const [searchResults, SetSearchResults] = useState([]);
   const [userForm, setUserForm] = useState('');
 
   return (
@@ -32,10 +30,6 @@ function App() {
             }}>Tactics Genius</a>
         </div>
         <div className="flex-none gap-2">
-          <div className="form-control">
-            <SearchBar SetSearchResults={SetSearchResults} />
-            <SearchResults searchResults={searchResults} />
-          </div>
           <div className="btn btn-ghost btn-circle avatar" onClick={() => {
             userForm === '' ? setUserForm(UserForm.Login) : setUserForm('');
           }}>
@@ -48,7 +42,10 @@ function App() {
         </div>
       </div>
       <LoginForm userForm={userForm} />
-      <TeamsList />
+      <div className="flex">
+        <TeamsList />
+        <MatchesList />
+      </div>
     </div>
   )
 }

@@ -12,7 +12,7 @@ export const TeamsList = () => {
 
   return (
     <div className="w-2/12">
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto max-h-[1000px]">
         <table className="table">
           {/* head */}
           <thead>
