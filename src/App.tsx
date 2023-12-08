@@ -4,7 +4,6 @@ import { LoginForm } from "./components/LoginForm";
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { TeamsList } from "./components/TeamsList";
-import { PlayerSelections } from "./components/PlayerSelections";
 
 export enum UserForm {
   Login = 'Login',
