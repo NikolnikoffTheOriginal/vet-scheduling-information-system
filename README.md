@@ -1,3 +1,5 @@
 Mikael Nikolnikov Diploma Work
 
-Run here: [tactics-genius](https://nikolnikofftheoriginal.github.io/tactics-genius/)
+Need to have node.js installed locally.
+Install npm locally.
+Run by using 'npm run test'
