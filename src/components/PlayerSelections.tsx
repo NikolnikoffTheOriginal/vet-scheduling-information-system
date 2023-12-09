@@ -549,6 +549,29 @@ export const PlayerSelections = ({ players }: any) => {
               setSecondCenterForward('');
             }}>Clear</button>}
           </div>
+          <button className="btn btn-outline" onClick={() => {
+            setGoalkeeper('');
+            setLeftBack('');
+            setRightBack('');
+            setFirstCenterBack('');
+            setSecondCenterBack('');
+            setThirdCenterBack('');
+            setFirstCenterMidfield('');
+            setSecondCenterMidfield('');
+            setLeftMidfield('');
+            setRightMidfield('');
+            setFirstCenterForward('');
+            setSecondCenterForward('');
+            setStriker('');
+            setFirstCenterDefensiveMidfield('');
+            setSecondCenterDefensiveMidfield('');
+            setThirdCenterDefensiveMidfield('');
+            setFirstAttackingMidfield('');
+            setSecondAttackingMidfield('');
+            setLeftWing('');
+            setRightWing('');
+            setDefensiveMidfield('');
+          }}>Clear</button>
         </div>}
 
         {formations === '4-3-3' && <div className="flex flex-col">
