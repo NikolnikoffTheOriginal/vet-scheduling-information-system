@@ -4,6 +4,7 @@ import { LoginForm } from "./components/LoginForm";
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { TeamsList } from "./components/TeamsList";
+import { FormationsInfo } from "./components/FormationsInfo";
 
 export enum UserForm {
   Login = 'Login',
@@ -43,6 +44,9 @@ function App() {
       <LoginForm userForm={userForm} />
       <div className="flex mt-4">
         <TeamsList />
+      </div>
+      <div className="mt-4 ml-3">
+        <FormationsInfo />
       </div>
     </div>
   )
