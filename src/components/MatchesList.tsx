@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { db } from "../database/db";
+import { IMatches } from "../database/interfaces";
 
-export const MatchesList = ({ teamName }: any) => {
-  const [matches, setMatches] = useState<any[]>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
+interface IMatchesList {
+  teamName: string;
+}
+
+export const MatchesList = ({ teamName }: IMatchesList) => {
+  const [matches, setMatches] = useState<Array<IMatches>>([]);
 
   useEffect(() => {
-    db.matches.toArray().then((data: any[]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+    db.matches.toArray().then((data: Array<IMatches>) => {
       setMatches(data);
     });
   }, []);

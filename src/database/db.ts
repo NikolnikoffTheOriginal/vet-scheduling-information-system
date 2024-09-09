@@ -1,23 +1,20 @@
 import Dexie from 'dexie';
+import { IMatches, ITeams } from './interfaces';
 
 // Define a type or interface for the Dexie object
 interface MyDatabase extends Dexie {
- teams: Dexie.Table<object, string>;
- matches: Dexie.Table<object, string>;
- scorers: Dexie.Table<object, string>;
+ teams: Dexie.Table<ITeams>;
+ matches: Dexie.Table<IMatches>;
 }
 
 // Define a Dexie database
-export const db: MyDatabase = new Dexie('MyDatabase') as MyDatabase;
+export const db: MyDatabase = new Dexie('PlayerBase') as MyDatabase;
 
 // Define an object store for the cached data
-db.version(23).stores({
+db.version(28).stores({
  teams: 'id',
  matches: 'id',
- scorers: 'id',
 });
-
-
 
 const options = {
  method: 'GET',
@@ -36,13 +33,4 @@ fetch('/api/competitions/2021/matches', options)
 .then((response) => response.json())
 .then(async (data) => {
  await db.matches.bulkPut(data.matches);
-})
-
-fetch('/api/competitions/2021/scorers', options)
-.then((response) => response.json())
-.then(async (data) => {
- // Add 'id' property to each scorer object
- const scorersWithId = data.scorers.map((scorer: any, index: any) => ({...scorer, id: index}));
- // Use Table.put() to overwrite the existing data
- await Promise.all(scorersWithId.map((scorer: object) => db.scorers.put(scorer)));
 })

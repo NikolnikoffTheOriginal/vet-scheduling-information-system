@@ -3,21 +3,22 @@ import { db } from "../database/db";
 import { PlayersList } from "./PlayersList";
 import { MatchesList } from "./MatchesList";
 import { PlayerSelections } from "./PlayerSelections";
+import { ISquadMember, ITeams } from "../database/interfaces";
 
 export const TeamsList = () => {
-  const [teams, setTeams] = useState<any[]>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
-  const [selectedTeamPlayers, setSelectedTeamPlayers] = useState<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
-  const [selectedTeamMatches, setSelectedTeamMatches] = useState<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const [teams, setTeams] = useState<Array<ITeams>>([]);
+  const [selectedTeamPlayers, setSelectedTeamPlayers] = useState<Array<ISquadMember>>([]); 
+  const [selectedTeamMatches, setSelectedTeamMatches] = useState<string>(); 
 
   useEffect(() => {
-    db.teams.toArray().then((data: any[]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+    db.teams.toArray().then((data: Array<ITeams>) => {
       setTeams(data);
     });
   }, []);
 
-  const handleTeamClick = (players: any, teamName: any) => {
-    setSelectedTeamPlayers(players);
-    setSelectedTeamMatches(teamName);
+  const handleTeamClick = ({ squad, name }: ITeams) => {
+    setSelectedTeamPlayers(squad);
+    setSelectedTeamMatches(name);
   };
 
   return (
@@ -33,11 +34,11 @@ export const TeamsList = () => {
           </thead>
           <tbody>
             {/* rows */}
-            {teams.map((team: any, index) => // eslint-disable-line @typescript-eslint/no-explicit-any
+            {teams.map((team, index) =>
               <tr key={team.id} className="hover">
                 <th className="pr-[2px]">{index + 1}</th>
                 <td className="cursor-pointer flex" onClick={() => {
-                  handleTeamClick(team.squad, team.name)
+                  handleTeamClick(team);
                 }}> <img src={team.crest} className="w-10 pr-3" />{team.name}</td>
                 {/* Include other team data as needed */}
               </tr>
@@ -47,7 +48,7 @@ export const TeamsList = () => {
       </div>
       {selectedTeamPlayers && <PlayersList players={selectedTeamPlayers} />}
       {selectedTeamMatches && <MatchesList teamName={selectedTeamMatches} />}
-      <PlayerSelections players={selectedTeamPlayers} />
+      <PlayerSelections squad={selectedTeamPlayers} />
     </div>
   );
 }
