@@ -14,9 +14,7 @@ export default {
   ],
 
   daisyui: {
-    themes: [
-      "light",
-    ]
+    themes: [],
   },
 }
 

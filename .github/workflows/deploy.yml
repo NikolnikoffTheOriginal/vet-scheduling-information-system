@@ -1,4 +1,4 @@
-name: Deploy tactics-genius to Pages
+name: Deploy vet-scheduling-tool to Pages
 
 on:
   workflow_dispatch:
