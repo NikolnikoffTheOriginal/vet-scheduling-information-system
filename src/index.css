@@ -9,10 +9,3 @@
     font-family: 'Noto Sans', sans-serif;
 }
 
-body {
-    height: 100vh;
-}
-
-.form-translate {
-    transform: translate(-50%, -50%);
-}
