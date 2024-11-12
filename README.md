@@ -1,5 +1,8 @@
 Mikael Nikolnikov Diploma Work
 
-Need to have node.js installed locally.
-Install npm locally.
+### Local running
+You need to have node.js and npm installed locally.
 Run by using 'npm run start'
+
+### Server-side running
+Tool is accesible on [Vet Scheduling Website](https://nikolnikofftheoriginal.github.io/vet-scheduling-tool/).
