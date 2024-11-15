@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface IPersonalInfo {
   onFinalSubmit: () => void;
@@ -6,6 +6,7 @@ interface IPersonalInfo {
 }
 
 export const PersonalInfo = ({ onFinalSubmit, onBackClick }: IPersonalInfo) => {
+  const ref = useRef<HTMLTextAreaElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,6 +19,13 @@ export const PersonalInfo = ({ onFinalSubmit, onBackClick }: IPersonalInfo) => {
       ...prevData,
       [field]: value
     }));
+  };
+
+  const updateTextArea = () => {
+    if (ref.current) {
+      ref.current.style.height = "auto";
+      ref.current.style.height = ref.current.scrollHeight + "px";
+    }
   };
 
   return (
@@ -103,6 +111,13 @@ export const PersonalInfo = ({ onFinalSubmit, onBackClick }: IPersonalInfo) => {
         </label>
 
       </div>
+
+      <textarea
+        className="textarea textarea-bordered w-full resize-none overflow-hidden"
+        placeholder="Message"
+        onChange={updateTextArea}
+        ref={ref}
+      ></textarea>
 
       <button
         className="btn btn-primary text-lg w-full"
