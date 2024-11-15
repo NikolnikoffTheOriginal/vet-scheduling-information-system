@@ -1,4 +1,4 @@
-name: Deploy vet-scheduling-tool to Pages
+name: Deploy vet-scheduling-information-system to Pages
 
 on:
   workflow_dispatch:

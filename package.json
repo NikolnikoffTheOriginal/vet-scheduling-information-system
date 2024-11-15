@@ -1,9 +1,9 @@
 {
-  "name": "vet-scheduling-tool",
+  "name": "vet-scheduling-information-system",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://nikolnikofftheoriginal.github.io/vet-scheduling-tool/",
+  "homepage": "https://nikolnikofftheoriginal.github.io/vet-scheduling-information-system/",
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",

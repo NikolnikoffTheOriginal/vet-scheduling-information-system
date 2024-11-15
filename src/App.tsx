@@ -2,6 +2,7 @@ import { useState } from "react"
 import { CalendarDate } from "./components/CalendarDate";
 import { ClientInfo } from "./components/ClientInfo";
 import { PersonalInfo } from "./components/PersonalInfo";
+import { SubmitWindow } from "./components/SubmitWindow";
 
 enum Page {
   'client',
@@ -24,8 +25,10 @@ export const App = () => {
       )}
 
       {page === Page.info && (
-        <PersonalInfo onFinalSubmit={() => setPage(Page.submit)} />
+        <PersonalInfo onFinalSubmit={() => setPage(Page.submit)} onBackClick={() => setPage(Page.date)}/>
       )}
+
+      {page === Page.submit && <SubmitWindow />}
     </div>
   )
 }

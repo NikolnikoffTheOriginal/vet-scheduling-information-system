@@ -5,4 +5,4 @@ You need to have node.js and npm installed locally.
 Run by using `npm run start`.
 
 ### Server-side running
-Information System is accesible on [Vet Scheduling Website](https://nikolnikofftheoriginal.github.io/vet-scheduling-tool/).
+Information System is accesible on [Vet Scheduling Website](https://nikolnikofftheoriginal.github.io/vet-scheduling-information-system/).

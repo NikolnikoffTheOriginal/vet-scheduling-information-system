@@ -2,9 +2,10 @@ import { useState } from "react";
 
 interface IPersonalInfo {
   onFinalSubmit: () => void;
+  onBackClick: () => void;
 }
 
-export const PersonalInfo = ({ onFinalSubmit }: IPersonalInfo) => {
+export const PersonalInfo = ({ onFinalSubmit, onBackClick }: IPersonalInfo) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -109,6 +110,13 @@ export const PersonalInfo = ({ onFinalSubmit }: IPersonalInfo) => {
         disabled={Object.values(formData).every(value => value !== '') ? false : true}
       >
         Next
+      </button>
+
+      <button
+        className="btn btn-secondary text-lg w-full"
+        onClick={onBackClick}
+      >
+        Back
       </button>
     </div>
   );
