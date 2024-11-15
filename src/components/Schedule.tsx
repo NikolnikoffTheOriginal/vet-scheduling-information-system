@@ -1,8 +1,8 @@
 import { useState } from "react"
-import { CalendarDate } from "./components/CalendarDate";
-import { ClientInfo } from "./components/ClientInfo";
-import { PersonalInfo } from "./components/PersonalInfo";
-import { SubmitWindow } from "./components/SubmitWindow";
+import { CalendarDate } from "./CalendarDate";
+import { ClientInfo } from "./ClientInfo";
+import { PersonalInfo } from "./PersonalInfo";
+import { SubmitWindow } from "./SubmitWindow";
 
 enum Page {
   'client',

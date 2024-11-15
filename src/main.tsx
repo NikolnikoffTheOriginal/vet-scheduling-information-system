@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Schedule from './Schedule.tsx'
+import Schedule from './components/Schedule.tsx'
 import './index.css'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 
