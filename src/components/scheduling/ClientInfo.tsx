@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button } from "../additionalComponents/Button";
 
 interface IClientInfo {
   onNextClick: () => void;
@@ -17,28 +16,36 @@ export const ClientInfo = ({ onNextClick }: IClientInfo) => {
       <div className="flex flex-col text-center">
         <p className="mb-2 text-xl">Your client status</p>
         <div className="flex gap-7">
-          <Button text="I am a new client"
+          <button
             className={isClicked === 'new' ? 'btn btn-neutral flex-1' : 'btn btn-outline flex-1'}
             onClick={() => setIsClicked('new')}
-          />
-          <Button text="I am an existing client"
+          >
+            I am a new client
+          </button>
+          <button
             className={isClicked === 'existing' ? 'btn btn-neutral flex-1' : 'btn btn-outline flex-1'}
             onClick={() => setIsClicked('existing')}
-          />
+          >
+            I am an existing client
+          </button>
         </div>
       </div>
 
       <div className="flex flex-col text-center">
         <p className="mb-2 text-xl">Your pet species</p>
         <div className="flex gap-7">
-          <Button text="Dog"
+          <button
             className={petSpecies === 'dog' ? 'btn btn-neutral flex-1' : 'btn btn-outline flex-1'}
             onClick={() => setPetSpecies('dog')}
-          />
-          <Button text="Cat"
+          >
+            Dog
+          </button>
+          <button
             className={petSpecies === 'cat' ? 'btn btn-neutral flex-1' : 'btn btn-outline flex-1'}
             onClick={() => setPetSpecies('cat')}
-          />
+          >
+            Cat
+          </button>
         </div>
       </div>
 
