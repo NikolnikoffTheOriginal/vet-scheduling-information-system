@@ -1,0 +1,3 @@
+export const STARTING_WORKING_HOUR = 9;
+export const CLOSING_WORKING_HOUR = 17;
+export const APPOINTMENT_DURATION = 30;
