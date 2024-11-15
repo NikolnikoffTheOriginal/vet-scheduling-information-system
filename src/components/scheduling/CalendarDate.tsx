@@ -1,8 +1,8 @@
 import { add, format } from "date-fns";
 import { useState } from "react";
 import Calendar from "react-calendar";
-import { STARTING_WORKING_HOUR, CLOSING_WORKING_HOUR, APPOINTMENT_DURATION } from "../constants";
-import { Loader } from "./Loader";
+import { STARTING_WORKING_HOUR, CLOSING_WORKING_HOUR, APPOINTMENT_DURATION } from "../../constants";
+import { Loader } from "../additionalComponents/Loader";
 
 interface IDateTime {
   date: Date | null;

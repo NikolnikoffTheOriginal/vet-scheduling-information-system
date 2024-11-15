@@ -109,7 +109,7 @@ export const PersonalInfo = ({ onFinalSubmit, onBackClick }: IPersonalInfo) => {
         onClick={onFinalSubmit}
         disabled={Object.values(formData).every(value => value !== '') ? false : true}
       >
-        Next
+        Submit
       </button>
 
       <button
