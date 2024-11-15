@@ -11,8 +11,8 @@ enum Page {
   'submit'
 }
 
-export const App = () => {
-  const [page, setPage] = useState(Page.info);
+export const Schedule = () => {
+  const [page, setPage] = useState(Page.client);
 
   return (
     <div className="flex justify-center items-center h-[100vh]">
@@ -33,4 +33,4 @@ export const App = () => {
   )
 }
 
-export default App
+export default Schedule;
