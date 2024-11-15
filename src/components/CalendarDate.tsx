@@ -41,11 +41,12 @@ export const CalendarDate = ({ onNextClick, onBackClick }: ICalendarDate) => {
 
   return (
     <div className="flex flex-col gap-5 shadow-lg p-40 rounded-box bg-neutral-content">
-      <p className="self-center">Choose a date for your appointment.</p>
+      <h1 className="text-2xl font-bold self-center">Choose a date and time for your appointment.</h1>
       <Calendar
         locale='en'
+        className='self-center'
         minDate={new Date()}
-        view="month"
+        view='month'
         onClickDay={(date) => {
           setDateTime((prev) => ({ ...prev, date, time: null }));
           setActiveDate(true);
@@ -61,7 +62,7 @@ export const CalendarDate = ({ onNextClick, onBackClick }: ICalendarDate) => {
       )}
 
       {dateTime.date && !loading && (
-        <div className="flex gap-4 justify-around flex-wrap w-[450px]">
+        <div className="flex gap-4 justify-around flex-wrap w-[450px] self-center">
           {timeSlots?.map((timeSlot, index) => (
             <button
               key={`time-slot-${index}`}
@@ -77,14 +78,14 @@ export const CalendarDate = ({ onNextClick, onBackClick }: ICalendarDate) => {
         </div>
       )}
       <button
-        className="btn btn-primary"
+        className="btn btn-primary text-lg w-full"
         disabled={activeDate && activeTime.activeTime ? false : true}
         onClick={onNextClick}
       >
         Next
       </button>
       <button
-        className="btn btn-secondary"
+        className="btn btn-secondary text-lg w-full"
         onClick={onBackClick}
       >
         Back
