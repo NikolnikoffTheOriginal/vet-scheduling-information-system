@@ -25,3 +25,5 @@ export interface IDateTime {
   date: string | null;
   time: string | null;
 }
+
+export const CLINICIANS = ['John Doe', 'Alice Smith'];

@@ -5,7 +5,7 @@ import { PersonalInfo } from "./PersonalInfo";
 import { SubmitWindow } from "./SubmitWindow";
 import { getDatabase, ref, set } from "firebase/database";
 import { uid } from "uid";
-import { IDatabase, IDateTime } from "../../constants";
+import { CLINICIANS, IDatabase, IDateTime } from "../../constants";
 
 enum Page {
   'client',
@@ -46,6 +46,11 @@ export const Schedule = () => {
     phoneNumber: '',
     message: '',
   });
+
+  if (clinician === 'No preference') {
+    const randomClinician = CLINICIANS[Math.floor(Math.random() * CLINICIANS.length)];
+    setClinician(randomClinician);
+  }
 
   return (
     <div className="flex justify-center items-center h-[100vh]">

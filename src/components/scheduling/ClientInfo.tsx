@@ -1,3 +1,5 @@
+import { CLINICIANS } from "../../constants";
+
 interface IClientInfo {
   isClicked: 'new' | 'existing' | null;
   petSpecies: 'dog' | 'cat' | null;
@@ -15,7 +17,6 @@ export const ClientInfo = ({
   setPetSpecies,
   setClinician,
 }: IClientInfo) => {
-  const clinicians = ['John Doe', 'Alice Smith'];
 
   return (
     <div className="flex flex-col gap-5 shadow-lg p-40 rounded-box bg-neutral-content">
@@ -62,10 +63,12 @@ export const ClientInfo = ({
         <select
           className="select select-bordered w-full"
           defaultValue={'No preference'}
-          onChange={(e) => setClinician(e.target.value)}
+          onChange={(e) => {
+            setClinician(e.target.value);
+          }}
         >
           <option>No preference</option>
-          {clinicians.map((clinician, index) => (
+          {CLINICIANS.map((clinician, index) => (
             <option key={index}>{clinician}</option>
           ))}
         </select>

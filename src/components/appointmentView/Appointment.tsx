@@ -30,7 +30,7 @@ export const Appointment = ({
   updateDataBase,
 }: IAppointment) => (
   <div className="flex gap-2">
-    <table className="table-auto w-full bg-neutral-content border-gray-300 rounded-box">
+    <table className="table-auto bg-neutral-content border-gray-300 rounded-box w-[600px]">
       <tbody>
         <tr className="border-b border-gray-300">
           <td className="text-lg p-4">{`Date: ${date}`}</td>
