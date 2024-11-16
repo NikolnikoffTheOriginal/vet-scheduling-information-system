@@ -96,8 +96,15 @@ export const Authentication = () => {
           <button
             className="btn btn-primary text-lg"
             onClick={adminSignIn}
+            onSubmit={(e) => e.preventDefault()}
           >
-            Login
+            Sign in
+          </button>
+          <button
+            className="btn btn-secondary text-lg"
+            onClick={() => setView(User.default)}
+          >
+            Back to user selection
           </button>
         </div>
       )}
@@ -142,8 +149,15 @@ export const Authentication = () => {
           <button
             className="btn btn-primary text-lg"
             onClick={vetSignIn}
+            onSubmit={(e) => e.preventDefault()}
           >
-            Login
+            Sign in
+          </button>
+          <button
+            className="btn btn-secondary text-lg"
+            onClick={() => setView(User.default)}
+          >
+            Back to user selection
           </button>
         </div>
       )}
