@@ -1,5 +1,6 @@
 
 interface IAppointment {
+  user: string,
   clientInfo: {
     status: string,
     name: string,
@@ -14,8 +15,8 @@ interface IAppointment {
     species: string,
   },
   clinician: string,
-  deleteFromDataBase: () => void;
-  updateDataBase: () => void;
+  deleteFromDataBase?: () => void;
+  updateDataBase?: () => void;
 }
 
 export const Appointment = ({
@@ -24,6 +25,7 @@ export const Appointment = ({
   date,
   petInfo,
   time,
+  user,
   deleteFromDataBase,
   updateDataBase,
 }: IAppointment) => (
@@ -52,33 +54,37 @@ export const Appointment = ({
     </table>
 
 
-    <button
-      className="btn btn-sm btn-success"
-      onClick={updateDataBase}
-    >
-      <svg
-        width="24px"
-        height="24px"
-        viewBox="0 -0.5 25 25"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M5.5 12.5L10.167 17L19.5 8" stroke="#000000" />
-      </svg>
-    </button>
-    <button
-      className="btn btn-sm btn-error"
-      onClick={deleteFromDataBase}
-    >
-      <svg
-        width="24px"
-        height="24px"
-        viewBox="0 -0.5 25 25"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M6.5 6.5L18.5 18.5M6.5 18.5L18.5 6.5" stroke="#000000" />
-      </svg>
-    </button>
-  </div>
+    {user === 'admin' && (
+      <>
+        <button
+          className="btn btn-sm btn-success"
+          onClick={updateDataBase}
+        >
+          <svg
+            width="24px"
+            height="24px"
+            viewBox="0 -0.5 25 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M5.5 12.5L10.167 17L19.5 8" stroke="#000000" />
+          </svg>
+        </button>
+        <button
+          className="btn btn-sm btn-error"
+          onClick={deleteFromDataBase}
+        >
+          <svg
+            width="24px"
+            height="24px"
+            viewBox="0 -0.5 25 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M6.5 6.5L18.5 18.5M6.5 18.5L18.5 6.5" stroke="#000000" />
+          </svg>
+        </button>
+      </>
+    )}
+  </div >
 );

@@ -14,8 +14,10 @@ export const AdminDashboard = () => {
 
   const getAppointments = useCallback(() => {
     const appointmentsRef = ref(db, 'appointments');
-    const unsubscribe = onValue(appointmentsRef, snapshot => {
+    onValue(appointmentsRef, snapshot => {
+      setAppointments([]);
       const data = snapshot.val();
+
       if (data) {
         const appointments = Object.entries(data).map(([uuid, appointmentData]) => ({
           ...appointmentData as IDatabase,
@@ -24,8 +26,6 @@ export const AdminDashboard = () => {
         setAppointments(appointments);
       }
     });
-
-    return () => unsubscribe();
   }, [db]);
 
   useEffect(() => {
@@ -79,6 +79,7 @@ export const AdminDashboard = () => {
                   time={appointment.time}
                   deleteFromDataBase={() => deleteFromDataBase(appointment.uuid)}
                   updateDataBase={() => updateDataBase(appointment.uuid, appointment)}
+                  user="admin"
                 />
               ))
           )}
