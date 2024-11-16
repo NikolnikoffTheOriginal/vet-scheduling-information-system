@@ -1,18 +1,23 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
-interface IPersonalInfo {
-  onFinalSubmit: () => void;
-  onBackClick: () => void;
+interface IFormData {
+  name: string;
+  email: string;
+  petName: string;
+  phoneNumber: string;
+  message: string;
 }
 
-export const PersonalInfo = ({ onFinalSubmit, onBackClick }: IPersonalInfo) => {
+interface IPersonalInfo {
+  formData: IFormData
+  onFinalSubmit: () => void;
+  onBackClick: () => void;
+  setFormData: (formData: IFormData | ((prev: IFormData) => IFormData)) => void;
+}
+
+export const PersonalInfo = ({ onFinalSubmit, onBackClick, formData, setFormData }: IPersonalInfo) => {
   const ref = useRef<HTMLTextAreaElement>(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    petName: '',
-    phoneNumber: ''
-  });
+
 
   const updateField = (field: keyof typeof formData, value: string) => {
     setFormData((prevData) => ({
@@ -115,7 +120,10 @@ export const PersonalInfo = ({ onFinalSubmit, onBackClick }: IPersonalInfo) => {
       <textarea
         className="textarea textarea-bordered w-full resize-none overflow-hidden"
         placeholder="Message"
-        onChange={updateTextArea}
+        onChange={(e) => {
+          updateTextArea();
+          updateField('message', e.target.value);
+        }}
         ref={ref}
       ></textarea>
 

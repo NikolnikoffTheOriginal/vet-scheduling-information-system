@@ -1,21 +1,18 @@
 import { add, format } from "date-fns";
 import { useState } from "react";
 import Calendar from "react-calendar";
-import { STARTING_WORKING_HOUR, CLOSING_WORKING_HOUR, APPOINTMENT_DURATION } from "../../constants";
+import { STARTING_WORKING_HOUR, CLOSING_WORKING_HOUR, APPOINTMENT_DURATION, IDateTime } from "../../constants";
 import { Loader } from "../additionalComponents/Loader";
 
-interface IDateTime {
-  date: Date | null;
-  time: Date | null;
-}
 
 interface ICalendarDate {
+  dateTime: IDateTime;
   onNextClick: () => void;
   onBackClick: () => void;
+  setDateTime: (date: IDateTime | ((prev: IDateTime) => IDateTime)) => void;
 }
 
-export const CalendarDate = ({ onNextClick, onBackClick }: ICalendarDate) => {
-  const [dateTime, setDateTime] = useState<IDateTime>({ date: null, time: null });
+export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }: ICalendarDate) => {
   const [activeDate, setActiveDate] = useState(false);
   const [activeTime, setActiveTime] = useState({ activeTime: false, index: 0 });
   const [loading, setLoading] = useState(false);
@@ -48,7 +45,7 @@ export const CalendarDate = ({ onNextClick, onBackClick }: ICalendarDate) => {
         minDate={new Date()}
         view='month'
         onClickDay={(date) => {
-          setDateTime((prev) => ({ ...prev, date, time: null }));
+          setDateTime((prev: IDateTime) => ({ ...prev, date, time: null }));
           setActiveDate(true);
           setActiveTime({ activeTime: false, index: 0 });
           setLoading(true);

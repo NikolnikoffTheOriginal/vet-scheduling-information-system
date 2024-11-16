@@ -1,13 +1,21 @@
-import { useState } from "react";
-
 interface IClientInfo {
+  isClicked: 'new' | 'existing' | null;
+  petSpecies: 'dog' | 'cat' | null;
   onNextClick: () => void;
+  setIsClicked: (value: 'new' | 'existing') => void;
+  setPetSpecies: (value: 'dog' | 'cat') => void;
+  setClinician: (value: string) => void;
 }
 
-export const ClientInfo = ({ onNextClick }: IClientInfo) => {
-  const [isClicked, setIsClicked] = useState<'new' | 'existing' | null>(null);
-  const [petSpecies, setPetSpecies] = useState<'dog' | 'cat' | null>(null);
-  const clinicians = ['John Doe', 'Alice Smith', 'Bob Brown', 'Charlie White', 'David Black'];
+export const ClientInfo = ({
+  onNextClick,
+  isClicked,
+  petSpecies,
+  setIsClicked,
+  setPetSpecies,
+  setClinician,
+}: IClientInfo) => {
+  const clinicians = ['John Doe', 'Alice Smith'];
 
   return (
     <div className="flex flex-col gap-5 shadow-lg p-40 rounded-box bg-neutral-content">
@@ -51,7 +59,11 @@ export const ClientInfo = ({ onNextClick }: IClientInfo) => {
 
       <div className="flex flex-col text-center">
         <p className="mb-2 text-xl">Choose a clinician</p>
-        <select className="select select-bordered w-full" defaultValue={'No preference'}>
+        <select
+          className="select select-bordered w-full"
+          defaultValue={'No preference'}
+          onChange={(e) => setClinician(e.target.value)}
+        >
           <option>No preference</option>
           {clinicians.map((clinician, index) => (
             <option key={index}>{clinician}</option>
