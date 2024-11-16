@@ -45,7 +45,7 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
         minDate={new Date()}
         view='month'
         onClickDay={(date) => {
-          setDateTime((prev: IDateTime) => ({ ...prev, date, time: null }));
+          setDateTime((prev: IDateTime) => ({ ...prev, date: format(date, 'MMMM dd'), time: null }));
           setActiveDate(true);
           setActiveTime({ activeTime: false, index: 0 });
           setLoading(true);
@@ -65,7 +65,7 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
               key={`time-slot-${index}`}
               className={activeTime.activeTime && activeTime.index === index ? 'btn btn-primary' : 'btn btn-outline'}
               onClick={() => {
-                setDateTime((prev) => ({ ...prev, time: timeSlot }))
+                setDateTime((prev) => ({ ...prev, time: format(timeSlot, 'kk:mm') }))
                 setActiveTime({ activeTime: true, index });
               }}
             >

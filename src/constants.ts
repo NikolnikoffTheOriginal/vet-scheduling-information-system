@@ -10,8 +10,8 @@ export interface IDatabase {
     phone: string,
     message: string,
   },
-  date: Date,
-  time: Date,
+  date: string,
+  time: string,
   petInfo: {
     name: string,
     species: string,
@@ -22,6 +22,6 @@ export interface IDatabase {
 }
 
 export interface IDateTime {
-  date: Date | null;
-  time: Date | null;
+  date: string | null;
+  time: string | null;
 }
