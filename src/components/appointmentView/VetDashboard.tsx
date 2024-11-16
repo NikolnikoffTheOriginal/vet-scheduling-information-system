@@ -4,7 +4,8 @@ import { Appointment } from "./Appointment";
 import { auth } from "../../firebase-config";
 import { useNavigate } from "react-router-dom";
 import { IDatabase } from "../../constants";
-import { ref, onValue, getDatabase } from "firebase/database";
+import { ref, onValue, getDatabase, remove } from "firebase/database";
+import { useOnUserStateChange } from "../../hooks/useOnUserStateChange";
 
 export const VetDashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -12,16 +13,7 @@ export const VetDashboard = () => {
   const navigate = useNavigate();
   const db = getDatabase();
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      setLoading(false);
-      if (!user) {
-        navigate("/login");
-      }
-    });
-
-    return unsubscribe;
-  }, [navigate]);
+  useOnUserStateChange();
 
   useEffect(() => {
     const appointmentsRef = ref(db, 'appointments');
@@ -39,6 +31,21 @@ export const VetDashboard = () => {
     });
     setLoading(false);
   }, [db]);
+
+  useEffect(() => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+  
+    if (appointments.length > 0) {
+      appointments.forEach(appointment => {
+        const appointmentDate = new Date(currentYear + appointment.date + " " + appointment.time);
+
+        if (appointmentDate < currentDate) {
+          remove(ref(db, "appointments/" + appointment.uuid));
+        }
+      });
+    }
+  }, [appointments, db]);
 
   const signOut = async () => {
     await auth.signOut();

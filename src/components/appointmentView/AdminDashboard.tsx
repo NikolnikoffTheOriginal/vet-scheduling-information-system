@@ -5,6 +5,7 @@ import { auth } from "../../firebase-config";
 import { Loader } from "../additionalComponents/Loader";
 import { getDatabase, onValue, ref, remove, set } from "firebase/database";
 import { IDatabase } from "../../constants";
+import { useOnUserStateChange } from "../../hooks/useOnUserStateChange";
 
 export const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -33,16 +34,7 @@ export const AdminDashboard = () => {
     setLoading(false);
   }, [getAppointments]);
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      setLoading(false);
-      if (!user) {
-        navigate("/login");
-      }
-    });
-
-    return unsubscribe;
-  }, [navigate]);
+  useOnUserStateChange();
 
   const signOut = async () => {
     await auth.signOut();
