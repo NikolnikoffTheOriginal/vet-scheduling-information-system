@@ -8,8 +8,8 @@ interface IAppointment {
     phone: string,
     message: string,
   },
-  date: Date,
-  time: Date,
+  date: string,
+  time: string,
   petInfo: {
     name: string,
     species: string,

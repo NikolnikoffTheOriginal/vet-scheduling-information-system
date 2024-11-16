@@ -47,9 +47,6 @@ export const Schedule = () => {
     message: '',
   });
 
-  console.log(dateTime.date);
-  console.log(dateTime.time);
-
   return (
     <div className="flex justify-center items-center h-[100vh]">
       {page === Page.client && (

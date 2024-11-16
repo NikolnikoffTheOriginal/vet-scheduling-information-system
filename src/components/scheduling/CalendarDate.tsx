@@ -1,8 +1,9 @@
 import { add, format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import { STARTING_WORKING_HOUR, CLOSING_WORKING_HOUR, APPOINTMENT_DURATION, IDateTime } from "../../constants";
+import { STARTING_WORKING_HOUR, CLOSING_WORKING_HOUR, APPOINTMENT_DURATION, IDateTime, IDatabase } from "../../constants";
 import { Loader } from "../additionalComponents/Loader";
+import { ref, onValue, getDatabase } from "firebase/database";
 
 
 interface ICalendarDate {
@@ -16,6 +17,25 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
   const [activeDate, setActiveDate] = useState(false);
   const [activeTime, setActiveTime] = useState({ activeTime: false, index: 0 });
   const [loading, setLoading] = useState(false);
+  const [appointments, setAppointments] = useState<Array<IDatabase>>([]);
+  const db = getDatabase();
+
+  useEffect(() => {
+    const appointmentsRef = ref(db, 'appointments');
+    onValue(appointmentsRef, snapshot => {
+      setAppointments([]);
+      const data = snapshot.val();
+
+      if (data) {
+        const appointments = Object.entries(data).map(([uuid, appointmentData]) => ({
+          ...appointmentData as IDatabase,
+          uuid,
+        }));
+        setAppointments(appointments);
+      }
+    });
+    setLoading(false);
+  }, [db]);
 
   const getWorkingTimeSlots = () => {
     if (!dateTime.date) {
@@ -34,6 +54,11 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
     return timeSlots;
   }
 
+  const getBookedTimeSlots = () => appointments.filter(appointment => appointment.date === dateTime.date)
+    .map(appointment => appointment.time);
+
+
+  const bookedTimeSlots = getBookedTimeSlots();
   const timeSlots = getWorkingTimeSlots();
 
   return (
@@ -63,7 +88,11 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
           {timeSlots?.map((timeSlot, index) => (
             <button
               key={`time-slot-${index}`}
-              className={activeTime.activeTime && activeTime.index === index ? 'btn btn-primary' : 'btn btn-outline'}
+              className={
+                bookedTimeSlots.includes(format(timeSlot, 'kk:mm'))
+                  ? 'btn btn-disabled'
+                  : activeTime.activeTime && activeTime.index === index ? 'btn btn-primary' : 'btn btn-outline'
+              }
               onClick={() => {
                 setDateTime((prev) => ({ ...prev, time: format(timeSlot, 'kk:mm') }))
                 setActiveTime({ activeTime: true, index });
