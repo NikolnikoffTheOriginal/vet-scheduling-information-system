@@ -1,5 +1,4 @@
 import { Appointment } from "./Appointment";
-import { useSignOutOnRefresh } from "../../hooks/useSignOutOnRefresh";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase-config";
@@ -9,7 +8,11 @@ export const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useSignOutOnRefresh();
+  const signOut = async () => {
+    await auth.signOut();
+    navigate("/login");
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setLoading(false);
@@ -26,7 +29,7 @@ export const AdminDashboard = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center">
+        <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-2">
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
           {/* iterate through every appointment. Also remove buttons if appointments does not exists */}
           <div className="flex items-baseline gap-2">
@@ -54,6 +57,10 @@ export const AdminDashboard = () => {
               </svg>
             </button>
           </div>
+          <button
+            className="btn btn-primary w-full"
+            onClick={signOut}
+          >Log out</button>
         </div >
       )}
     </div >

@@ -1,8 +1,7 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { useEffect, useState } from "react";
 import { auth } from "../../firebase-config";
 import { useNavigate } from "react-router-dom";
-import { useSignOutOnRefresh } from "../../hooks/useSignOutOnRefresh";
 
 enum User {
   'default',
@@ -35,7 +34,17 @@ export const Authentication = () => {
     }
   }
 
-  useSignOutOnRefresh();
+  const signOutUser = async () => {
+    await signOut(auth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", signOutUser);
+
+    return () => {
+      window.removeEventListener("beforeunload", signOutUser);
+    }
+  }, [])
 
   return (
     <div className="flex justify-center items-center h-[100vh] flex-col">

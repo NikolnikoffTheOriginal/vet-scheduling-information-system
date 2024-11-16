@@ -1,6 +1,6 @@
 export const Appointment = () => (
   // the data will come from database
-  <table className="table bg-secondary flex-1 mt-3">
+  <table className="table bg-secondary flex-1">
     <tbody>
       <tr>
         <td>Date:</td>
