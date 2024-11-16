@@ -14,9 +14,8 @@ enum Page {
   'submit'
 }
 
-const writeToDataBase = ({ clientInfo, approved, clinician, date, petInfo, time }: IDatabase) => {
+const writeToDataBase = ({ clientInfo, approved, clinician, date, petInfo, time, uuid }: IDatabase) => {
   const db = getDatabase();
-  const uuid = uid();
   const reference = ref(db, 'appointments/' + uuid);
 
   set(reference, {
@@ -26,10 +25,12 @@ const writeToDataBase = ({ clientInfo, approved, clinician, date, petInfo, time 
     petInfo,
     clinician,
     approved,
+    uuid,
   });
 }
 
 export const Schedule = () => {
+  const uuid = uid();
   const [page, setPage] = useState(Page.client);
   // clientInfo
   const [isClicked, setIsClicked] = useState<'new' | 'existing' | null>(null);
@@ -45,6 +46,9 @@ export const Schedule = () => {
     phoneNumber: '',
     message: '',
   });
+
+  console.log(dateTime.date);
+  console.log(dateTime.time);
 
   return (
     <div className="flex justify-center items-center h-[100vh]">
@@ -88,6 +92,7 @@ export const Schedule = () => {
                 species: petSpecies!,
               },
               time: dateTime.time!,
+              uuid,
             });
           }}
           onBackClick={() => setPage(Page.date)}

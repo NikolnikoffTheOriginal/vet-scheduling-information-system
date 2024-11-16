@@ -1,17 +1,37 @@
 import { Appointment } from "./Appointment";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase-config";
 import { Loader } from "../additionalComponents/Loader";
+import { getDatabase, onValue, ref, remove, set } from "firebase/database";
+import { IDatabase } from "../../constants";
 
 export const AdminDashboard = () => {
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const db = getDatabase();
+  const [appointments, setAppointments] = useState<Array<IDatabase>>([]);
+  const [loading, setLoading] = useState(true);
 
-  const signOut = async () => {
-    await auth.signOut();
-    navigate("/login");
-  };
+  const getAppointments = useCallback(() => {
+    const appointmentsRef = ref(db, 'appointments');
+    const unsubscribe = onValue(appointmentsRef, snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        const appointments = Object.entries(data).map(([uuid, appointmentData]) => ({
+          ...appointmentData as IDatabase,
+          uuid,
+        }));
+        setAppointments(appointments);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [db]);
+
+  useEffect(() => {
+    getAppointments();
+    setLoading(false);
+  }, [getAppointments]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
@@ -24,39 +44,44 @@ export const AdminDashboard = () => {
     return unsubscribe;
   }, [navigate]);
 
+  const signOut = async () => {
+    await auth.signOut();
+    navigate("/login");
+  };
+
+  const deleteFromDataBase = (uuid: string) => {
+    remove(ref(db, 'appointments/' + uuid))
+      .then(() => getAppointments())
+  }
+
+  const updateDataBase = (uuid: string, data: IDatabase) => {
+    set(ref(db, 'appointments/' + uuid), { ...data, approved: true });
+  }
+
   return (
     <div className="flex justify-center items-center h-[100vh]">
       {loading ? (
         <Loader />
       ) : (
-        <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-2">
+        <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-3">
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          {/* iterate through every appointment. Also remove buttons if appointments does not exists */}
-          <div className="flex items-baseline gap-2">
-            <Appointment />
-            <button className="btn btn-sm btn-success">
-              <svg
-                width="24px"
-                height="24px"
-                viewBox="0 -0.5 25 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M5.5 12.5L10.167 17L19.5 8" stroke="#000000" />
-              </svg>
-            </button>
-            <button className="btn btn-sm btn-error">
-              <svg
-                width="24px"
-                height="24px"
-                viewBox="0 -0.5 25 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M6.5 6.5L18.5 18.5M6.5 18.5L18.5 6.5" stroke="#000000" />
-              </svg>
-            </button>
-          </div>
+          {appointments.filter(appointment => !appointment.approved).length === 0 ? (
+            <div className="text-2xl">There are no appointments yet.</div>
+          ) : (
+            appointments.filter(appointment => !appointment.approved)
+              .map(appointment => (
+                <Appointment
+                  key={appointment.uuid}
+                  clientInfo={appointment.clientInfo}
+                  clinician={appointment.clinician}
+                  date={appointment.date}
+                  petInfo={appointment.petInfo}
+                  time={appointment.time}
+                  deleteFromDataBase={() => deleteFromDataBase(appointment.uuid)}
+                  updateDataBase={() => updateDataBase(appointment.uuid, appointment)}
+                />
+              ))
+          )}
           <button
             className="btn btn-primary w-full"
             onClick={signOut}

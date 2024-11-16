@@ -18,6 +18,7 @@ export interface IDatabase {
   },
   clinician: string,
   approved: boolean,
+  uuid: string,
 }
 
 export interface IDateTime {
