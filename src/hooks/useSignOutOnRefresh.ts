@@ -2,7 +2,7 @@ import { signOut } from "firebase/auth";
 import { useEffect } from "react";
 import { auth } from "../firebase-config";
 
-export const useSignOut = () => {
+export const useSignOutOnRefresh = () => {
   const signOutUser = async () => {
     await signOut(auth);
   };

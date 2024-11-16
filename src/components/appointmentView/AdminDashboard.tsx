@@ -1,5 +1,5 @@
 import { Appointment } from "./Appointment";
-import { useSignOut } from "../../hooks/useSignOut";
+import { useSignOutOnRefresh } from "../../hooks/useSignOutOnRefresh";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase-config";
@@ -9,7 +9,7 @@ export const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useSignOut();
+  useSignOutOnRefresh();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setLoading(false);

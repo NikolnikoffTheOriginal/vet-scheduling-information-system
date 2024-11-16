@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSignOut } from "../../hooks/useSignOut";
+import { useSignOutOnRefresh } from "../../hooks/useSignOutOnRefresh";
 import { Loader } from "../additionalComponents/Loader";
 import { Appointment } from "./Appointment";
 import { auth } from "../../firebase-config";
@@ -9,7 +9,7 @@ export const VetDashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useSignOut();
+  useSignOutOnRefresh();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setLoading(false);

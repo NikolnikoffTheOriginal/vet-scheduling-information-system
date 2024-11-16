@@ -2,7 +2,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { auth } from "../../firebase-config";
 import { useNavigate } from "react-router-dom";
-import { useSignOut } from "../../hooks/useSignOut";
+import { useSignOutOnRefresh } from "../../hooks/useSignOutOnRefresh";
 
 enum User {
   'default',
@@ -11,10 +11,11 @@ enum User {
 }
 
 export const Authentication = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [view, setView] = useState<User>(User.default);
-  const navigate = useNavigate();
 
   const adminSignIn = async () => {
     try {
@@ -34,7 +35,7 @@ export const Authentication = () => {
     }
   }
 
-  useSignOut();
+  useSignOutOnRefresh();
 
   return (
     <div className="flex justify-center items-center h-[100vh] flex-col">
