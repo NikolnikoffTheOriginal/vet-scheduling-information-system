@@ -1,6 +1,11 @@
 import { Appointment } from "./Appointment";
+import { useSignOut } from "../../hooks/useSignOut";
+import { useRedirectToAuth } from "../../hooks/useRedirectToAuth";
 
 export const AdminDashboard = () => {
+  useSignOut();
+  useRedirectToAuth();
+
   return (
     <div className="flex justify-center items-center h-[100vh]">
       <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center">
