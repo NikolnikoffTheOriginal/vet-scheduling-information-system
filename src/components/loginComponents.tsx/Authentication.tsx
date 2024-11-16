@@ -57,7 +57,13 @@ export const Authentication = () => {
       )}
 
       {view === User.admin && (
-        <div className="flex flex-col gap-3">
+        <form
+          className="flex flex-col gap-3"
+          onSubmit={(e) => {
+            e.preventDefault();
+            adminSignIn();
+          }}
+        >
           <h1 className="text-2xl font-bold">Please enter your credentials</h1>
           <label className="input input-bordered flex items-center gap-2">
             <svg
@@ -94,9 +100,8 @@ export const Authentication = () => {
             />
           </label>
           <button
+            type="submit"
             className="btn btn-primary text-lg"
-            onClick={adminSignIn}
-            onSubmit={(e) => e.preventDefault()}
           >
             Sign in
           </button>
@@ -106,11 +111,17 @@ export const Authentication = () => {
           >
             Back to user selection
           </button>
-        </div>
+        </form>
       )}
 
       {view === User.vet && (
-        <div className="flex flex-col gap-3">
+        <form
+          className="flex flex-col gap-3"
+          onSubmit={(e) => {
+            e.preventDefault();
+            vetSignIn();
+          }}
+        >
           <h1 className="text-2xl font-bold">Please enter your credentials</h1>
           <label className="input input-bordered flex items-center gap-2">
             <svg
@@ -147,9 +158,8 @@ export const Authentication = () => {
             />
           </label>
           <button
+            type="submit"
             className="btn btn-primary text-lg"
-            onClick={vetSignIn}
-            onSubmit={(e) => e.preventDefault()}
           >
             Sign in
           </button>
@@ -159,7 +169,7 @@ export const Authentication = () => {
           >
             Back to user selection
           </button>
-        </div>
+        </form>
       )}
     </div>
   )
