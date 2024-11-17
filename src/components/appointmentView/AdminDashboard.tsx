@@ -6,24 +6,65 @@ import { Loader } from "../additionalComponents/Loader";
 import { getDatabase, onValue, ref, remove, set } from "firebase/database";
 import { IDatabase } from "../../constants";
 import { useOnUserStateChange } from "../../hooks/useOnUserStateChange";
+import { filterByDate } from "../../utils/filterByDate";
+import { filterByClinician } from "../../utils/filterByClinician";
+
+const getFilteredAppointmentsOnChange = (filteringOption: string, originalAppointments: Array<IDatabase>) => {
+  let filteredAppointments: Array<IDatabase> = [];
+
+  if (filteringOption === 'current date') {
+    filteredAppointments = filterByDate(originalAppointments);
+  }
+
+  if (filteringOption === 'none') {
+    filteredAppointments = originalAppointments;
+  }
+
+  if (filteringOption === 'clinician (John Doe)') {
+    filteredAppointments = filterByClinician(originalAppointments, 'John Doe');
+  }
+
+  if (filteringOption === 'clinician (Alice Smith)') {
+    filteredAppointments = filterByClinician(originalAppointments, 'Alice Smith');
+  }
+
+  if (filteringOption === 'dog') {
+    filteredAppointments = originalAppointments.filter(appointment => appointment.petInfo.species === 'dog');
+  }
+
+  if (filteringOption === 'cat') {
+    filteredAppointments = originalAppointments.filter(appointment => appointment.petInfo.species === 'cat');
+  }
+
+  return filteredAppointments;
+}
 
 export const AdminDashboard = () => {
   const navigate = useNavigate();
   const db = getDatabase();
   const [appointments, setAppointments] = useState<Array<IDatabase>>([]);
   const [loading, setLoading] = useState(true);
+  const [filteringOption, setFilteringOption] = useState('none');
+
+  const originalAppointments = [...appointments];
+  const filteredAppointments = getFilteredAppointmentsOnChange(filteringOption, originalAppointments);
 
   const getAppointments = useCallback(() => {
     const appointmentsRef = ref(db, 'appointments');
     onValue(appointmentsRef, snapshot => {
-      setAppointments([]);
       const data = snapshot.val();
 
       if (data) {
         const appointments = Object.entries(data).map(([uuid, appointmentData]) => ({
           ...appointmentData as IDatabase,
           uuid,
-        }));
+        })).sort((a, b) => {
+          const dateA = new Date(`${a.date} ${a.time}`);
+          const dateB = new Date(`${b.date} ${b.time}`);
+
+          return dateA.getTime() - dateB.getTime();
+        }).filter(appointment => !appointment.approved);
+
         setAppointments(appointments);
       }
     });
@@ -55,12 +96,31 @@ export const AdminDashboard = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-3">
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          {appointments.filter(appointment => !appointment.approved).length === 0 ? (
+        <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-3 overflow-y-auto overflow-x-hidden max-h-[90vh]">
+          <div className="flex w-full justify-between items-center">
+            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+            <div className="flex items-center justify-around">
+              <p className="font-bold">Filter by: </p>
+              <select
+                className="bg-transparent"
+                defaultValue={"none"}
+                onChange={(e) => {
+                  setFilteringOption(e.target.value);
+                }}>
+                <option>none</option>
+                <option>current date</option>
+                <option>clinician (John Doe)</option>
+                <option>clinician (Alice Smith)</option>
+                <option>dog</option>
+                <option>cat</option>
+              </select>
+            </div>
+          </div>
+
+          {appointments.length === 0 ? (
             <div className="text-2xl">There are no appointments yet.</div>
           ) : (
-            appointments.filter(appointment => !appointment.approved)
+            filteredAppointments
               .map(appointment => (
                 <Appointment
                   key={appointment.uuid}
@@ -73,8 +133,7 @@ export const AdminDashboard = () => {
                   updateDataBase={() => updateDataBase(appointment.uuid, appointment)}
                   user="admin"
                 />
-              ))
-          )}
+              )))}
           <button
             className="btn btn-primary w-full"
             onClick={signOut}

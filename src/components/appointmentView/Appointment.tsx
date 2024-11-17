@@ -46,6 +46,7 @@ export const Appointment = ({
         </tr>
         <tr className="border-b border-gray-300">
           <td className="text-lg p-4">{`Vet: ${clinician}`}</td>
+          <td className="text-lg p-4 border-l border-gray-300">{`Species: ${petInfo.species}`}</td>
         </tr>
         <tr>
           <td className="text-lg p-4">{`Message: ${clientInfo.message}`}</td>

@@ -58,7 +58,7 @@ export const VetDashboard = () => {
         <Loader />
       ) : (
 
-        <div className="bg-white p-8 rounded-lg shadow-md flex items-center flex-col gap-2">
+        <div className="bg-white p-8 rounded-lg shadow-md flex items-center flex-col gap-3 overflow-y-auto overflow-x-hidden max-h-[90vh]">
           <h1 className="text-2xl font-bold">Your upcoming appointments:</h1>
           {appointments.filter(appointment => !!appointment.approved).length === 0 ? (
             <div className="text-2xl">There are no appointments yet.</div>
