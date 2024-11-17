@@ -6,38 +6,8 @@ import { Loader } from "../additionalComponents/Loader";
 import { getDatabase, onValue, ref, remove, set } from "firebase/database";
 import { IDatabase } from "../../constants";
 import { useOnUserStateChange } from "../../hooks/useOnUserStateChange";
-import { filterByDate } from "../../utils/filterByDate";
-import { filterByClinician } from "../../utils/filterByClinician";
+import { getFilteredAppointmentsOnChange } from "../../utils/getFilteredAppointmentsOnChange";
 
-const getFilteredAppointmentsOnChange = (filteringOption: string, originalAppointments: Array<IDatabase>) => {
-  let filteredAppointments: Array<IDatabase> = [];
-
-  if (filteringOption === 'current date') {
-    filteredAppointments = filterByDate(originalAppointments);
-  }
-
-  if (filteringOption === 'none') {
-    filteredAppointments = originalAppointments;
-  }
-
-  if (filteringOption === 'clinician (John Doe)') {
-    filteredAppointments = filterByClinician(originalAppointments, 'John Doe');
-  }
-
-  if (filteringOption === 'clinician (Alice Smith)') {
-    filteredAppointments = filterByClinician(originalAppointments, 'Alice Smith');
-  }
-
-  if (filteringOption === 'dog') {
-    filteredAppointments = originalAppointments.filter(appointment => appointment.petInfo.species === 'dog');
-  }
-
-  if (filteringOption === 'cat') {
-    filteredAppointments = originalAppointments.filter(appointment => appointment.petInfo.species === 'cat');
-  }
-
-  return filteredAppointments;
-}
 
 export const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -97,24 +67,26 @@ export const AdminDashboard = () => {
         <Loader />
       ) : (
         <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-3 overflow-y-auto overflow-x-hidden max-h-[90vh]">
-          <div className="flex w-full justify-between items-center">
+          <div className={`flex justify-between items-center ${appointments.length !== 0 ? 'w-full' : ''}`}>
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-            <div className="flex items-center justify-around">
-              <p className="font-bold">Filter by: </p>
-              <select
-                className="bg-transparent"
-                defaultValue={"none"}
-                onChange={(e) => {
-                  setFilteringOption(e.target.value);
-                }}>
-                <option>none</option>
-                <option>current date</option>
-                <option>clinician (John Doe)</option>
-                <option>clinician (Alice Smith)</option>
-                <option>dog</option>
-                <option>cat</option>
-              </select>
-            </div>
+            {appointments.length !== 0 && (
+              <div className="flex items-center justify-around">
+                <p className="font-bold">Filter by: </p>
+                <select
+                  className="bg-transparent"
+                  defaultValue={"none"}
+                  onChange={(e) => {
+                    setFilteringOption(e.target.value);
+                  }}>
+                  <option>none</option>
+                  <option>current date</option>
+                  <option>clinician (John Doe)</option>
+                  <option>clinician (Alice Smith)</option>
+                  <option>dog</option>
+                  <option>cat</option>
+                </select>
+              </div>
+            )}
           </div>
 
           {appointments.length === 0 ? (
