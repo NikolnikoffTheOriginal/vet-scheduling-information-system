@@ -1,4 +1,3 @@
-import { Appointment } from "./Appointment";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase-config";
@@ -7,6 +6,7 @@ import { getDatabase, onValue, ref, remove, set } from "firebase/database";
 import { IDatabase } from "../../constants";
 import { useOnUserStateChange } from "../../hooks/useOnUserStateChange";
 import { getFilteredAppointmentsOnChange } from "../../utils/getFilteredAppointmentsOnChange";
+import { getValidAppointments } from "../../utils/getValidAppointments";
 
 
 export const AdminDashboard = () => {
@@ -18,6 +18,7 @@ export const AdminDashboard = () => {
 
   const originalAppointments = [...appointments];
   const filteredAppointments = getFilteredAppointmentsOnChange(filteringOption, originalAppointments);
+  const validAppointments = getValidAppointments(filteredAppointments);
 
   const getAppointments = useCallback(() => {
     const appointmentsRef = ref(db, 'appointments');
@@ -33,7 +34,7 @@ export const AdminDashboard = () => {
           const dateB = new Date(`${b.date} ${b.time}`);
 
           return dateA.getTime() - dateB.getTime();
-        }).filter(appointment => !appointment.approved);
+        });
 
         setAppointments(appointments);
       }
@@ -57,60 +58,95 @@ export const AdminDashboard = () => {
       .then(() => getAppointments())
   }
 
-  const updateDataBase = (uuid: string, data: IDatabase) => {
-    set(ref(db, 'appointments/' + uuid), { ...data, approved: true });
+  const updateAppoinemnt = (uuid: string, data: Partial<IDatabase>) => {
+    set(ref(db, 'appointments/' + uuid), data);
   }
 
   return (
-    <div className="flex justify-center items-center h-[100vh]">
+    <div className="h-[100vH] bg-base-200">
       {loading ? (
         <Loader />
       ) : (
-        <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-3 overflow-y-auto overflow-x-hidden max-h-[90vh]">
-          <div className={`flex justify-between items-center ${appointments.length !== 0 ? 'w-full' : ''}`}>
-            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-            {appointments.length !== 0 && (
-              <div className="flex items-center justify-around">
-                <p className="font-bold">Filter by: </p>
-                <select
-                  className="bg-transparent"
-                  defaultValue={"none"}
-                  onChange={(e) => {
-                    setFilteringOption(e.target.value);
-                  }}>
-                  <option>none</option>
-                  <option>current date</option>
-                  <option>clinician (John Doe)</option>
-                  <option>clinician (Alice Smith)</option>
-                  <option>dog</option>
-                  <option>cat</option>
-                </select>
-              </div>
-            )}
+        <div className="p-2">
+          <div className="navbar bg-base-300">
+            <div className="flex-1">
+              <p className="text-xl font-bold">Admin Dashboard</p>
+              <button
+                className="btn btn-primary text-lg ml-2"
+                onClick={signOut}
+              >Log out</button>
+            </div>
+            <p className="font-bold">Filter by: </p>
+            <select
+              className="bg-transparent"
+              defaultValue={"none"}
+              onChange={(e) => {
+                setFilteringOption(e.target.value);
+              }}>
+              <option>none</option>
+              <option>current date</option>
+              <option>clinician (John Doe)</option>
+              <option>clinician (Alice Smith)</option>
+              <option>dog</option>
+              <option>cat</option>
+            </select>
           </div>
-
-          {appointments.length === 0 ? (
-            <div className="text-2xl">There are no appointments yet.</div>
+          {validAppointments.length === 0 ? (
+            <p className="text-2xl flex justify-center items-center h-[90vh]">There are no appointments yet.</p>
           ) : (
-            filteredAppointments
-              .map(appointment => (
-                <Appointment
-                  key={appointment.uuid}
-                  clientInfo={appointment.clientInfo}
-                  clinician={appointment.clinician}
-                  date={appointment.date}
-                  petInfo={appointment.petInfo}
-                  time={appointment.time}
-                  deleteFromDataBase={() => deleteFromDataBase(appointment.uuid)}
-                  updateDataBase={() => updateDataBase(appointment.uuid, appointment)}
-                  user="admin"
-                />
-              )))}
-          <button
-            className="btn btn-primary w-full"
-            onClick={signOut}
-          >Log out</button>
-        </div >
+            <table className="table">
+              <thead>
+                <tr className="text-center">
+                  <th></th>
+                  <th>Client Name</th>
+                  <th>Email</th>
+                  <th>Phone number</th>
+                  <th>Date and Time</th>
+                  <th>Pet Name</th>
+                  <th>Species</th>
+                  <th>Clinician</th>
+                  <th>Message</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {validAppointments.map((appointment, index) => (
+                  <tr key={appointment.uuid} className="hover text-center">
+                    <th>{index + 1}</th>
+                    <td>{appointment.clientInfo.name}</td>
+                    <td>{appointment.clientInfo.email}</td>
+                    <td>{appointment.clientInfo.phone}</td>
+                    <td>{appointment.date} {appointment.time}</td>
+                    <td>{appointment.petInfo.name}</td>
+                    <td>{appointment.petInfo.species}</td>
+                    <td>{appointment.clinician}</td>
+                    <td>{appointment.clientInfo.message}</td>
+                    <td>
+                      <select
+                        name="Status"
+                        defaultValue={appointment.approved ? 'Approved' : 'Pending'}
+                        className="bg-inherit"
+                        onChange={(e) => {
+                          if (e.target.value === 'Approved') {
+                            updateAppoinemnt(appointment.uuid, { approved: true });
+                          } else if (e.target.value === 'Declined') {
+                            deleteFromDataBase(appointment.uuid);
+                          } else if (e.target.value === 'Pending') {
+                            updateAppoinemnt(appointment.uuid, { approved: false });
+                          }
+                        }}
+                      >
+                        <option>Pending</option>
+                        <option>Approved</option>
+                        <option>Declined</option>
+                      </select>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       )}
     </div >
   );

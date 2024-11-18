@@ -4,9 +4,10 @@ import { Appointment } from "./Appointment";
 import { auth } from "../../firebase-config";
 import { useNavigate } from "react-router-dom";
 import { IDatabase } from "../../constants";
-import { ref, onValue, getDatabase, remove } from "firebase/database";
+import { ref, onValue, getDatabase } from "firebase/database";
 import { useOnUserStateChange } from "../../hooks/useOnUserStateChange";
 import { getFilteredAppointmentsOnChange } from "../../utils/getFilteredAppointmentsOnChange";
+import { getValidAppointments } from "../../utils/getValidAppointments";
 
 export const VetDashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -16,6 +17,7 @@ export const VetDashboard = () => {
   const [filteringOption, setFilteringOption] = useState('none');
   const originalAppointments = [...appointments];
   const filteredAppointments = getFilteredAppointmentsOnChange(filteringOption, originalAppointments);
+  const validAppointments = getValidAppointments(filteredAppointments);
 
   useOnUserStateChange();
 
@@ -41,21 +43,6 @@ export const VetDashboard = () => {
     setLoading(false);
   }, [db]);
 
-  useEffect(() => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-
-    if (appointments.length > 0) {
-      appointments.forEach(appointment => {
-        const appointmentDate = new Date(currentYear + appointment.date + " " + appointment.time);
-
-        if (appointmentDate < currentDate) {
-          remove(ref(db, "appointments/" + appointment.uuid));
-        }
-      });
-    }
-  }, [appointments, db]);
-
   const signOut = async () => {
     await auth.signOut();
     navigate("/login");
@@ -67,9 +54,9 @@ export const VetDashboard = () => {
         <Loader />
       ) : (
         <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-3 overflow-y-auto overflow-x-hidden max-h-[90vh]">
-          <div className={`flex justify-between items-center ${appointments.length !== 0 ? 'w-full' : ''}`}>
+          <div className={`flex justify-between items-center ${validAppointments.length !== 0 ? 'w-full' : ''}`}>
             <h1 className="text-2xl font-bold">Vet Dashboard</h1>
-            {appointments.length !== 0 && (
+            {validAppointments.length !== 0 && (
               <div className="flex items-center justify-around">
                 <p className="font-bold">Filter by: </p>
                 <select
@@ -88,10 +75,10 @@ export const VetDashboard = () => {
               </div>
             )}
           </div>
-          {appointments.length === 0 ?
+          {validAppointments.length === 0 ?
             <div className="text-2xl">There are no appointments yet.</div>
             : (
-              filteredAppointments.map(appointment => (
+              validAppointments.map(appointment => (
                 <Appointment
                   key={appointment.uuid}
                   clientInfo={appointment.clientInfo}
