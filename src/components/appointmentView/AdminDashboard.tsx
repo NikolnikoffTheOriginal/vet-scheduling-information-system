@@ -7,6 +7,7 @@ import { IDatabase } from "../../constants";
 import { useOnUserStateChange } from "../../hooks/useOnUserStateChange";
 import { getFilteredAppointmentsOnChange } from "../../utils/getFilteredAppointmentsOnChange";
 import { getValidAppointments } from "../../utils/getValidAppointments";
+import { Filter } from "../additionalComponents/Filter";
 
 
 export const AdminDashboard = () => {
@@ -63,11 +64,11 @@ export const AdminDashboard = () => {
   }
 
   return (
-    <div className="h-[100vH] bg-base-200">
+    <div className="bg-base-200 min-h-screen flex flex-col">
       {loading ? (
         <Loader />
       ) : (
-        <div className="p-2">
+        <div className="p-2 flex-1">
           <div className="navbar bg-base-300">
             <div className="flex-1">
               <p className="text-xl font-bold">Admin Dashboard</p>
@@ -76,20 +77,7 @@ export const AdminDashboard = () => {
                 onClick={signOut}
               >Log out</button>
             </div>
-            <p className="font-bold">Filter by: </p>
-            <select
-              className="bg-transparent"
-              defaultValue={"none"}
-              onChange={(e) => {
-                setFilteringOption(e.target.value);
-              }}>
-              <option>none</option>
-              <option>current date</option>
-              <option>clinician (John Doe)</option>
-              <option>clinician (Alice Smith)</option>
-              <option>dog</option>
-              <option>cat</option>
-            </select>
+            <Filter setFilteringOption={setFilteringOption} isNotApproveNeeded={true}/>
           </div>
           {validAppointments.length === 0 ? (
             <p className="text-2xl flex justify-center items-center h-[90vh]">There are no appointments yet.</p>
@@ -148,6 +136,8 @@ export const AdminDashboard = () => {
           )}
         </div>
       )}
+
+      <footer>&copy; Mikael Nikolnikov Diploma Work 2024</footer>
     </div >
   );
 };

@@ -3,11 +3,6 @@ import { IDatabase } from "../constants";
 export const getFilteredAppointmentsOnChange = (filteringOption: string, originalAppointments: Array<IDatabase>) => {
   let filteredAppointments: Array<IDatabase> = [];
 
-  if (filteringOption === 'current date') {
-    const currentDate = new Date();
-    filteredAppointments = originalAppointments.filter(appointment => new Date(appointment.date + '' + appointment.time) === currentDate);
-  }
-
   if (filteringOption === 'none') {
     filteredAppointments = originalAppointments;
   }
@@ -26,6 +21,18 @@ export const getFilteredAppointmentsOnChange = (filteringOption: string, origina
 
   if (filteringOption === 'cat') {
     filteredAppointments = originalAppointments.filter(appointment => appointment.petInfo.species === 'cat');
+  }
+
+  if (filteringOption === 'other pet species') {
+    filteredAppointments = originalAppointments.filter(appointment => appointment.petInfo.species !== 'dog' && appointment.petInfo.species !== 'cat');
+  }
+
+  if (filteringOption === 'approved') {
+    filteredAppointments = originalAppointments.filter(appointment => appointment.approved);
+  }
+
+  if (filteringOption === 'not approved') {
+    filteredAppointments = originalAppointments.filter(appointment => !appointment.approved);
   }
 
   return filteredAppointments;

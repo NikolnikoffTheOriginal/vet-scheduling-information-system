@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { CLINICIANS } from "../../constants";
 
 interface IClientInfo {
@@ -17,6 +18,13 @@ export const ClientInfo = ({
   setPetSpecies,
   setClinician,
 }: IClientInfo) => {
+  const ref = useRef<HTMLInputElement>(null);
+
+  const handleChangeOfPetSpecies = () => {
+    if (ref.current) {
+      ref.current.value = '';
+    }
+  };
 
   return (
     <div className="flex flex-col gap-5 shadow-lg p-40 rounded-box bg-neutral-content">
@@ -45,17 +53,23 @@ export const ClientInfo = ({
         <div className="flex gap-7">
           <button
             className={petSpecies === 'dog' ? 'btn btn-neutral flex-1' : 'btn btn-outline flex-1'}
-            onClick={() => setPetSpecies('dog')}
+            onClick={() => {
+              setPetSpecies('dog');
+              handleChangeOfPetSpecies();
+            }}
           >
             Dog
           </button>
           <button
             className={petSpecies === 'cat' ? 'btn btn-neutral flex-1' : 'btn btn-outline flex-1'}
-            onClick={() => setPetSpecies('cat')}
+            onClick={() => {
+              setPetSpecies('cat');
+              handleChangeOfPetSpecies();
+            }}
           >
             Cat
           </button>
-          <input className="input input-bordered" placeholder="Other..." onChange={(e) => setPetSpecies(e.target.value)}/>
+          <input ref={ref} className="input input-bordered" placeholder="Other..." onChange={(e) => setPetSpecies(e.target.value)}/>
         </div>
       </div>
 

@@ -53,7 +53,7 @@ export const Schedule = () => {
   }
 
   return (
-    <div className="flex justify-center items-center h-[100vh]">
+    <div className="flex justify-center items-center min-h-screen flex-col">
       {page === Page.client && (
         <ClientInfo
           onNextClick={() => setPage(Page.date)}
@@ -104,6 +104,7 @@ export const Schedule = () => {
       )}
 
       {page === Page.submit && <SubmitWindow />}
+      <footer>&copy; Mikael Nikolnikov Diploma Work 2024</footer>
     </div>
   )
 }

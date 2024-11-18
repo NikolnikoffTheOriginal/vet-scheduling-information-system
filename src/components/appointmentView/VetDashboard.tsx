@@ -8,6 +8,7 @@ import { ref, onValue, getDatabase } from "firebase/database";
 import { useOnUserStateChange } from "../../hooks/useOnUserStateChange";
 import { getFilteredAppointmentsOnChange } from "../../utils/getFilteredAppointmentsOnChange";
 import { getValidAppointments } from "../../utils/getValidAppointments";
+import { Filter } from "../additionalComponents/Filter";
 
 export const VetDashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -49,31 +50,16 @@ export const VetDashboard = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-[100vh]">
+    <div className="flex justify-center items-center min-h-screen flex-col">
       {loading ? (
         <Loader />
       ) : (
-        <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-3 overflow-y-auto overflow-x-hidden max-h-[90vh]">
-          <div className={`flex justify-between items-center ${validAppointments.length !== 0 ? 'w-full' : ''}`}>
+        <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-3 overflow-y-auto overflow-x-hidden max-h-[90vh] min-w-[500px]">
+          <div className='flex justify-between items-center w-full'>
             <h1 className="text-2xl font-bold">Vet Dashboard</h1>
-            {validAppointments.length !== 0 && (
-              <div className="flex items-center justify-around">
-                <p className="font-bold">Filter by: </p>
-                <select
-                  className="bg-transparent"
-                  defaultValue={"none"}
-                  onChange={(e) => {
-                    setFilteringOption(e.target.value);
-                  }}>
-                  <option>none</option>
-                  <option>current date</option>
-                  <option>clinician (John Doe)</option>
-                  <option>clinician (Alice Smith)</option>
-                  <option>dog</option>
-                  <option>cat</option>
-                </select>
-              </div>
-            )}
+            <div className="flex">
+              <Filter setFilteringOption={setFilteringOption} isNotApproveNeeded={false}/>
+            </div>
           </div>
           {validAppointments.length === 0 ?
             <div className="text-2xl">There are no appointments yet.</div>
@@ -96,6 +82,7 @@ export const VetDashboard = () => {
           >Log out</button>
         </div>
       )}
+      <footer>&copy; Mikael Nikolnikov Diploma Work 2024</footer>
     </div>
   );
 }
