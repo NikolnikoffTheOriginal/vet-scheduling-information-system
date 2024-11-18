@@ -141,7 +141,7 @@ export const Authentication = () => {
           }}
         >
           <h1 className="text-2xl font-bold">Please enter your credentials</h1>
-          <label className="input input-bordered flex items-center gap-2">
+          <label className={`input ${error ? 'input-error' : 'input-bordered'} flex items-center gap-2`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
@@ -154,10 +154,13 @@ export const Authentication = () => {
               type="text"
               className="grow bg-inherit"
               placeholder="Username"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError(false);
+              }}
             />
           </label>
-          <label className="input input-bordered flex items-center gap-2">
+          <label className={`input ${error ? 'input-error' : 'input-bordered'} flex items-center gap-2`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
@@ -172,9 +175,13 @@ export const Authentication = () => {
               type="password"
               className="grow bg-inherit"
               placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(false);
+              }}
             />
           </label>
+          {error && <span className='error text-red-600 self-center'>Wrong credentials</span>}
           <button
             type="submit"
             className="btn btn-primary text-lg"
