@@ -34,7 +34,7 @@ export const Schedule = () => {
   const [page, setPage] = useState(Page.client);
   // clientInfo
   const [isClicked, setIsClicked] = useState<'new' | 'existing' | null>(null);
-  const [petSpecies, setPetSpecies] = useState<'dog' | 'cat' | null>(null);
+  const [petSpecies, setPetSpecies] = useState<'dog' | 'cat' | string | null >(null);
   const [clinician, setClinician] = useState('No preference');
   // calendarDate
   const [dateTime, setDateTime] = useState<IDateTime>({ date: null, time: null });

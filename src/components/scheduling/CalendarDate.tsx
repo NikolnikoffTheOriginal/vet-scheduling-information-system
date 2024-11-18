@@ -54,12 +54,17 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
     return timeSlots;
   }
 
-  const getBookedTimeSlots = () => appointments.filter(appointment => appointment.date === dateTime.date)
-    .map(appointment => appointment.time);
-
-
-  const bookedTimeSlots = getBookedTimeSlots();
   const timeSlots = getWorkingTimeSlots();
+
+  const getBookedTimeSlots = () => appointments.filter(appointment => appointment.date === dateTime.date).map(appointment => appointment.time);
+  const getIfTimePassed = () => {
+    const existingTimeSlots = timeSlots && timeSlots.filter(timeSlot => format(timeSlot, 'kk:mm') < format(new Date(), 'kk:mm'));
+    const currentDate = format(new Date(), 'MMMM dd');
+    return { existingTimeSlots, currentDate };
+  };
+
+  const { currentDate, existingTimeSlots } = getIfTimePassed();
+  const bookedTimeSlots = getBookedTimeSlots();
 
   return (
     <div className="flex flex-col gap-5 shadow-lg p-40 rounded-box bg-neutral-content">
@@ -89,7 +94,9 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
             <button
               key={`time-slot-${index}`}
               className={
-                bookedTimeSlots.includes(format(timeSlot, 'kk:mm'))
+                bookedTimeSlots.includes(format(timeSlot, 'kk:mm')) ||
+                  existingTimeSlots && existingTimeSlots.includes(timeSlot)
+                  && dateTime.date === currentDate
                   ? 'btn btn-disabled'
                   : activeTime.activeTime && activeTime.index === index ? 'btn btn-primary' : 'btn btn-outline'
               }

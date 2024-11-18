@@ -2,10 +2,10 @@ import { CLINICIANS } from "../../constants";
 
 interface IClientInfo {
   isClicked: 'new' | 'existing' | null;
-  petSpecies: 'dog' | 'cat' | null;
+  petSpecies: 'dog' | 'cat' | string | null;
   onNextClick: () => void;
   setIsClicked: (value: 'new' | 'existing') => void;
-  setPetSpecies: (value: 'dog' | 'cat') => void;
+  setPetSpecies: (value: 'dog' | 'cat' | string) => void;
   setClinician: (value: string) => void;
 }
 
@@ -55,6 +55,7 @@ export const ClientInfo = ({
           >
             Cat
           </button>
+          <input className="input input-bordered" placeholder="Other..." onChange={(e) => setPetSpecies(e.target.value)}/>
         </div>
       </div>
 

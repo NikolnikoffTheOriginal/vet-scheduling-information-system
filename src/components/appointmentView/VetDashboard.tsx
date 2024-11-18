@@ -68,7 +68,7 @@ export const VetDashboard = () => {
       ) : (
         <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-3 overflow-y-auto overflow-x-hidden max-h-[90vh]">
           <div className={`flex justify-between items-center ${appointments.length !== 0 ? 'w-full' : ''}`}>
-            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+            <h1 className="text-2xl font-bold">Vet Dashboard</h1>
             {appointments.length !== 0 && (
               <div className="flex items-center justify-around">
                 <p className="font-bold">Filter by: </p>
