@@ -78,7 +78,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
       </td>
       <td>
         <select
-          className="text-center"
+          className="text-center disabled:bg-inherit disabled:text-black"
           disabled={showEdit}
           defaultValue={appointment.clinician}
           onChange={(e) => updateAppoinemnt(appointment.uuid, { ...appointment, clinician: e.target.value })}
