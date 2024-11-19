@@ -15,7 +15,7 @@ export const VetDashboard = () => {
   const [appointments, setAppointments] = useState<Array<IDatabase>>([]);
   const navigate = useNavigate();
   const db = getDatabase();
-  const [filteringOption, setFilteringOption] = useState('none');
+  const [filteringOption, setFilteringOption] = useState <string | null>(null);
   const originalAppointments = [...appointments];
   const filteredAppointments = getFilteredAppointmentsOnChange(filteringOption, originalAppointments);
   const validAppointments = getValidAppointments(filteredAppointments);
@@ -57,7 +57,7 @@ export const VetDashboard = () => {
         <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center gap-3 overflow-y-auto overflow-x-hidden max-h-[90vh] min-w-[500px]">
           <div className='flex justify-between items-center w-full'>
             <h1 className="text-2xl font-bold">Vet Dashboard</h1>
-            <div className="flex">
+            <div className="gap-3">
               <Filter setFilteringOption={setFilteringOption} isNotApproveNeeded={false}/>
             </div>
           </div>

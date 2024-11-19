@@ -8,6 +8,8 @@ import { useOnUserStateChange } from "../../hooks/useOnUserStateChange";
 import { getFilteredAppointmentsOnChange } from "../../utils/getFilteredAppointmentsOnChange";
 import { getValidAppointments } from "../../utils/getValidAppointments";
 import { Filter } from "../additionalComponents/Filter";
+import Calendar from "react-calendar";
+import { format } from "date-fns";
 
 
 export const AdminDashboard = () => {
@@ -15,11 +17,23 @@ export const AdminDashboard = () => {
   const db = getDatabase();
   const [appointments, setAppointments] = useState<Array<IDatabase>>([]);
   const [loading, setLoading] = useState(true);
-  const [filteringOption, setFilteringOption] = useState('none');
+  const [filteringOption, setFilteringOption] = useState<string | null >(null);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [date, setDate] = useState<Date | null>(null);
 
   const originalAppointments = [...appointments];
-  const filteredAppointments = getFilteredAppointmentsOnChange(filteringOption, originalAppointments);
-  const validAppointments = getValidAppointments(filteredAppointments);
+  const validAppointments = getValidAppointments(getFilteredAppointmentsOnChange(filteringOption, originalAppointments));
+
+  const filterByDate = (appointment: IDatabase) => {
+    if (!date || !appointment) {
+      return;
+    }
+
+    const appointmentDate = new Date(`${appointment.date} ${appointment.time}`);
+    return format(appointmentDate, 'MMMM dd') === format(date, 'MMMM dd');
+  }
+
+  const filterByDateAppointments = validAppointments.filter(appointment => filterByDate(appointment));
 
   const getAppointments = useCallback(() => {
     const appointmentsRef = ref(db, 'appointments');
@@ -63,25 +77,59 @@ export const AdminDashboard = () => {
     set(ref(db, 'appointments/' + uuid), data);
   }
 
+  const handleDateChange = (value: Date | null) => {
+    setDate(value);
+    setShowCalendar(false);
+  }
+
   return (
     <div className="bg-base-200 min-h-screen flex flex-col">
       {loading ? (
         <Loader />
       ) : (
         <div className="p-2 flex-1">
-          <div className="navbar bg-base-300">
-            <div className="flex-1">
+          <div className="navbar bg-base-300 flex items-center justify-between">
+            <div className="flex items-center">
               <p className="text-xl font-bold">Admin Dashboard</p>
               <button
                 className="btn btn-primary text-lg ml-2"
                 onClick={signOut}
               >Log out</button>
             </div>
-            <Filter setFilteringOption={setFilteringOption} isNotApproveNeeded={true}/>
+            <div className="relative gap-3 flex items-center">
+              <p className="font-bold">Choose date to filter:</p>
+              <input
+                type="text"
+                value={date ? date.toLocaleDateString() : ''}
+                onClick={() => setShowCalendar(!showCalendar)}
+                readOnly
+                className="border p-2 rounded"
+                placeholder="Select a date"
+              />
+
+              <button className="btn btn-primary" onClick={() => handleDateChange(null)}>Clear</button>
+
+              {showCalendar && (
+                <div className="absolute z-10 top-12">
+                  <Calendar
+                    locale="en"
+                    className="p-2"
+                    minDate={new Date()}
+                    onChange={(e) => handleDateChange(e as Date)}
+                    value={date}
+                  />
+                </div>
+              )}
+            </div>
+            <div className="gap-2">
+              <Filter setFilteringOption={setFilteringOption} isNotApproveNeeded={true} />
+            </div>
           </div>
-          {validAppointments.length === 0 ? (
+          {validAppointments.length === 0 && !date ? (
             <p className="text-2xl flex justify-center items-center h-[90vh]">There are no appointments yet.</p>
-          ) : (
+          ) : date && filterByDateAppointments.length === 0 ? (
+            <p className="text-2xl flex justify-center items-center h-[90vh]">There are no appointments for this date.</p>
+          ) :(
             <table className="table">
               <thead>
                 <tr className="text-center">
@@ -98,7 +146,40 @@ export const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {validAppointments.map((appointment, index) => (
+                {date ? filterByDateAppointments.map((appointment, index) => (
+                  <tr key={appointment.uuid} className="hover text-center">
+                    <th>{index + 1}</th>
+                    <td>{appointment.clientInfo.name}</td>
+                    <td>{appointment.clientInfo.email}</td>
+                    <td>{appointment.clientInfo.phone}</td>
+                    <td>{appointment.date} {appointment.time}</td>
+                    <td>{appointment.petInfo.name}</td>
+                    <td>{appointment.petInfo.species}</td>
+                    <td>{appointment.clinician}</td>
+                    <td>{appointment.clientInfo.message}</td>
+                    <td>
+                      <select
+                        name="Status"
+                        defaultValue={appointment.approved ? 'Approved' : 'Pending'}
+                        className="bg-inherit"
+                        onChange={(e) => {
+                          if (e.target.value === 'Approved') {
+                            updateAppoinemnt(appointment.uuid, { approved: true });
+                          } else if (e.target.value === 'Declined') {
+                            deleteFromDataBase(appointment.uuid);
+                          } else if (e.target.value === 'Pending') {
+                            updateAppoinemnt(appointment.uuid, { approved: false });
+                          }
+                        }}
+                      >
+                        <option>Pending</option>
+                        <option>Approved</option>
+                        <option>Declined</option>
+                      </select>
+                    </td>
+                  </tr>
+
+                )) : validAppointments.map((appointment, index) => (
                   <tr key={appointment.uuid} className="hover text-center">
                     <th>{index + 1}</th>
                     <td>{appointment.clientInfo.name}</td>

@@ -1,5 +1,5 @@
 interface IFilter {
-  setFilteringOption: (value: string) => void;
+  setFilteringOption: (value: string | null) => void;
   isNotApproveNeeded: boolean;
 }
 
@@ -12,7 +12,6 @@ export const Filter = ({ setFilteringOption, isNotApproveNeeded }: IFilter) => (
       onChange={(e) => {
         setFilteringOption(e.target.value);
       }}>
-      <option>none</option>
       <option>clinician (John Doe)</option>
       <option>clinician (Alice Smith)</option>
       <option>dog</option>
@@ -21,5 +20,6 @@ export const Filter = ({ setFilteringOption, isNotApproveNeeded }: IFilter) => (
       <option>approved</option>
       {isNotApproveNeeded ? <option>not approved</option> : ''}
     </select>
+    <button className="btn btn-primary" onClick={() => setFilteringOption(null)}>Clear</button>
   </>
 );
