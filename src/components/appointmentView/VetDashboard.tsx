@@ -15,7 +15,7 @@ export const VetDashboard = () => {
   const [appointments, setAppointments] = useState<Array<IDatabase>>([]);
   const navigate = useNavigate();
   const db = getDatabase();
-  const [filteringOption, setFilteringOption] = useState <string | null>(null);
+  const [filteringOption, setFilteringOption] = useState('none');
   const originalAppointments = [...appointments];
   const filteredAppointments = getFilteredAppointmentsOnChange(filteringOption, originalAppointments);
   const validAppointments = getValidAppointments(filteredAppointments);

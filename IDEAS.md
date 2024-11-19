@@ -1,4 +1,3 @@
-1. filtering by date.
 2. edit information for admin + move delete appointment to separate col.
 3. validation for email in personal info
 4. add consent for privacy policy -> link to the page.

@@ -10,6 +10,7 @@ import { getValidAppointments } from "../../utils/getValidAppointments";
 import { Filter } from "../additionalComponents/Filter";
 import Calendar from "react-calendar";
 import { format } from "date-fns";
+import { AdminAppointmentView } from "./AdminAppointmentView";
 
 
 export const AdminDashboard = () => {
@@ -17,7 +18,7 @@ export const AdminDashboard = () => {
   const db = getDatabase();
   const [appointments, setAppointments] = useState<Array<IDatabase>>([]);
   const [loading, setLoading] = useState(true);
-  const [filteringOption, setFilteringOption] = useState<string | null >(null);
+  const [filteringOption, setFilteringOption] = useState('none');
   const [showCalendar, setShowCalendar] = useState(false);
   const [date, setDate] = useState<Date | null>(null);
 
@@ -129,7 +130,7 @@ export const AdminDashboard = () => {
             <p className="text-2xl flex justify-center items-center h-[90vh]">There are no appointments yet.</p>
           ) : date && filterByDateAppointments.length === 0 ? (
             <p className="text-2xl flex justify-center items-center h-[90vh]">There are no appointments for this date.</p>
-          ) :(
+          ) : (
             <table className="table">
               <thead>
                 <tr className="text-center">
@@ -143,74 +144,14 @@ export const AdminDashboard = () => {
                   <th>Clinician</th>
                   <th>Message</th>
                   <th>Status</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {date ? filterByDateAppointments.map((appointment, index) => (
-                  <tr key={appointment.uuid} className="hover text-center">
-                    <th>{index + 1}</th>
-                    <td>{appointment.clientInfo.name}</td>
-                    <td>{appointment.clientInfo.email}</td>
-                    <td>{appointment.clientInfo.phone}</td>
-                    <td>{appointment.date} {appointment.time}</td>
-                    <td>{appointment.petInfo.name}</td>
-                    <td>{appointment.petInfo.species}</td>
-                    <td>{appointment.clinician}</td>
-                    <td>{appointment.clientInfo.message}</td>
-                    <td>
-                      <select
-                        name="Status"
-                        defaultValue={appointment.approved ? 'Approved' : 'Pending'}
-                        className="bg-inherit"
-                        onChange={(e) => {
-                          if (e.target.value === 'Approved') {
-                            updateAppoinemnt(appointment.uuid, { approved: true });
-                          } else if (e.target.value === 'Declined') {
-                            deleteFromDataBase(appointment.uuid);
-                          } else if (e.target.value === 'Pending') {
-                            updateAppoinemnt(appointment.uuid, { approved: false });
-                          }
-                        }}
-                      >
-                        <option>Pending</option>
-                        <option>Approved</option>
-                        <option>Declined</option>
-                      </select>
-                    </td>
-                  </tr>
-
+                  <AdminAppointmentView key={appointment.uuid} appointment={appointment} deleteFromDataBase={deleteFromDataBase} updateAppoinemnt={updateAppoinemnt} index={index} />
                 )) : validAppointments.map((appointment, index) => (
-                  <tr key={appointment.uuid} className="hover text-center">
-                    <th>{index + 1}</th>
-                    <td>{appointment.clientInfo.name}</td>
-                    <td>{appointment.clientInfo.email}</td>
-                    <td>{appointment.clientInfo.phone}</td>
-                    <td>{appointment.date} {appointment.time}</td>
-                    <td>{appointment.petInfo.name}</td>
-                    <td>{appointment.petInfo.species}</td>
-                    <td>{appointment.clinician}</td>
-                    <td>{appointment.clientInfo.message}</td>
-                    <td>
-                      <select
-                        name="Status"
-                        defaultValue={appointment.approved ? 'Approved' : 'Pending'}
-                        className="bg-inherit"
-                        onChange={(e) => {
-                          if (e.target.value === 'Approved') {
-                            updateAppoinemnt(appointment.uuid, { approved: true });
-                          } else if (e.target.value === 'Declined') {
-                            deleteFromDataBase(appointment.uuid);
-                          } else if (e.target.value === 'Pending') {
-                            updateAppoinemnt(appointment.uuid, { approved: false });
-                          }
-                        }}
-                      >
-                        <option>Pending</option>
-                        <option>Approved</option>
-                        <option>Declined</option>
-                      </select>
-                    </td>
-                  </tr>
+                  <AdminAppointmentView key={appointment.uuid} appointment={appointment} deleteFromDataBase={deleteFromDataBase} updateAppoinemnt={updateAppoinemnt} index={index} />
                 ))}
               </tbody>
             </table>

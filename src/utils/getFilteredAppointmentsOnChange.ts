@@ -1,9 +1,9 @@
 import { IDatabase } from "../constants";
 
-export const getFilteredAppointmentsOnChange = (filteringOption: string | null, originalAppointments: Array<IDatabase>) => {
+export const getFilteredAppointmentsOnChange = (filteringOption: string, originalAppointments: Array<IDatabase>) => {
   let filteredAppointments: Array<IDatabase> = [];
 
-  if (!filteringOption) {
+  if (filteringOption === 'none') {
     filteredAppointments = originalAppointments;
   }
 
