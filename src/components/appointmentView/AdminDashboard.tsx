@@ -145,6 +145,7 @@ export const AdminDashboard = () => {
                   <th>Message</th>
                   <th>Status</th>
                   <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
