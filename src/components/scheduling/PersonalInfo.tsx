@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { validateEmail } from "../../utils/validateEmail";
+import { Link } from "react-router-dom";
 
 interface IFormData {
   name: string;
@@ -19,6 +20,7 @@ interface IPersonalInfo {
 export const PersonalInfo = ({ onFinalSubmit, onBackClick, formData, setFormData }: IPersonalInfo) => {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [emailError, setEmailError] = useState(false);
+  const [privacyPolicy, setPrivacyPolicy] = useState(false);
 
   const updateField = (field: keyof typeof formData, value: string) => {
     setFormData((prevData) => ({
@@ -138,11 +140,14 @@ export const PersonalInfo = ({ onFinalSubmit, onBackClick, formData, setFormData
         }}
         ref={ref}
       ></textarea>
+      <div className="flex gap-1">
+        <input type="checkbox" className="checkbox" onClick={() => setPrivacyPolicy(!privacyPolicy)}/>I HAVE READ AND AGREED TO <Link to={'/privacyPolicy'} target="_blank" rel="noopener noreferrer" className="text-blue-400">PRIVACY POLICY</Link>
 
+      </div>
       <button
         className="btn btn-primary text-lg w-full"
         onClick={onFinalSubmit}
-        disabled={Object.values(formData).every(value => value !== '') && !emailError ? false : true}
+        disabled={Object.values(formData).every(value => value !== '') && !emailError && !privacyPolicy ? false : true}
       >
         Submit
       </button>

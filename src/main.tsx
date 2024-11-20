@@ -6,6 +6,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import { Authentication } from './components/loginComponents.tsx/Authentication.tsx'
 import { AdminDashboard } from './components/appointmentView/AdminDashboard.tsx'
 import { VetDashboard } from './components/appointmentView/VetDashboard.tsx'
+import { PrivacyPolicy } from './components/scheduling/PrivacyPolicy.tsx'
 
 // for adminDashboard and vetDashboard add check for the correct credentials
 
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Route path="/login" element={<Authentication />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} /> 
         <Route path="/vetDashboard" element={<VetDashboard />} />
+        <Route path='/privacyPolicy' element={<PrivacyPolicy />} />
         <Route path="*" element={<Schedule />} />
       </Routes>
     </HashRouter>
