@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IDatabase } from "../../constants";
 import { validateEmail } from "../../utils/validateEmail";
+import { sendEmail } from "../../utils/sendEmail";
 
 interface IAdminAppointmentView {
   appointment: IDatabase;
@@ -127,10 +128,12 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         <select
           name="Status"
           defaultValue={appointment.approved ? 'Approved' : 'Pending'}
+          disabled={!showEdit}
           className="bg-inherit"
           onChange={(e) => {
             if (e.target.value === 'Approved') {
               setApproved(true);
+              sendEmail(appointment.clientInfo.name, appointment.clientInfo.email,appointment.date, appointment.time)
             } else if (e.target.value === 'Pending') {
               setApproved(false);
             }
