@@ -2,7 +2,6 @@ import { add, format } from "date-fns";
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import { STARTING_WORKING_HOUR, CLOSING_WORKING_HOUR, APPOINTMENT_DURATION, IDateTime, IDatabase } from "../../constants";
-import { Loader } from "../additionalComponents/Loader";
 import { ref, onValue, getDatabase } from "firebase/database";
 
 
@@ -16,7 +15,6 @@ interface ICalendarDate {
 export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }: ICalendarDate) => {
   const [activeDate, setActiveDate] = useState(false);
   const [activeTime, setActiveTime] = useState({ activeTime: false, index: 0 });
-  const [loading, setLoading] = useState(false);
   const [appointments, setAppointments] = useState<Array<IDatabase>>([]);
   const db = getDatabase();
 
@@ -34,7 +32,6 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
         setAppointments(appointments);
       }
     });
-    setLoading(false);
   }, [db]);
 
   const getWorkingTimeSlots = () => {
@@ -78,17 +75,10 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
           setDateTime((prev: IDateTime) => ({ ...prev, date: format(date, 'MMMM dd'), time: null }));
           setActiveDate(true);
           setActiveTime({ activeTime: false, index: 0 });
-          setLoading(true);
         }}
       />
 
-      {loading && setTimeout(() => setLoading(false), 1000) && (
-        <div className="flex justify-center">
-          <Loader />
-        </div>
-      )}
-
-      {dateTime.date && !loading && (
+      {dateTime.date && (
         <div className="flex gap-4 justify-around flex-wrap w-[450px] self-center">
           {timeSlots?.map((timeSlot, index) => (
             <button

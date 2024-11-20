@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IDatabase } from "../../constants";
-import { isValid, parse } from "date-fns";
+import { validateEmail } from "../../utils/validateEmail";
 
 interface IAdminAppointmentView {
   appointment: IDatabase;
@@ -11,15 +11,17 @@ interface IAdminAppointmentView {
 
 export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAppoinemnt, index }: IAdminAppointmentView) => {
   const [showEdit, setShowEdit] = useState(true);
-  const validateDate = (date: string) => {
-    const parsedDate = parse(date, 'MMMM dd kk:mm', appointment.date);
-
-    if (!isValid(parsedDate)) {
-      return false;
-    }
-
-    return true;
-  }
+  const [emailError, setEmailError] = useState(false);
+  const [clinician, setClinician] = useState(appointment.clinician);
+  const [approved, setApproved] = useState(appointment.approved);
+  const [date, setDate] = useState(appointment.date);
+  const [time, setTime] = useState(appointment.time);
+  const [message, setMessage] = useState(appointment.clientInfo.message);
+  const [name, setName] = useState(appointment.clientInfo.name);
+  const [email, setEmail] = useState(appointment.clientInfo.email);
+  const [phone, setPhone] = useState(appointment.clientInfo.phone);
+  const [petName, setPetName] = useState(appointment.petInfo.name);
+  const [species, setSpecies] = useState(appointment.petInfo.species);
 
   return (
     <tr key={appointment.uuid} className="hover text-center">
@@ -28,34 +30,23 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         <input
           className="text-center"
           disabled={showEdit}
-          value={appointment.clientInfo.name}
-          onChange={(e) => updateAppoinemnt(appointment.uuid, { ...appointment, clientInfo: { ...appointment.clientInfo, name: e.target.value } })}
+          value={name}
+          placeholder={appointment.clientInfo.name}
+          onChange={(e) => setName(e.target.value)}
         />
       </td>
       <td>
         <input
-          className="text-center"
+          className={`text-center ${emailError ? 'input-error' : ''}`}
           disabled={showEdit}
-          value={appointment.clientInfo.email}
-          onChange={(e) => updateAppoinemnt(appointment.uuid, { ...appointment, clientInfo: { ...appointment.clientInfo, email: e.target.value } })}
-        />
-      </td>
-      <td>
-        <input
-          className="text-center"
-          disabled={showEdit}
-          value={appointment.clientInfo.phone}
-          onChange={(e) => updateAppoinemnt(appointment.uuid, { ...appointment, clientInfo: { ...appointment.clientInfo, phone: e.target.value } })}
-        />
-      </td>
-      <td>
-        <input
-          className="text-center"
-          disabled={showEdit}
-          value={`${appointment.date} ${appointment.time}`}
+          value={email}
+          placeholder={appointment.clientInfo.email}
           onChange={(e) => {
-            if (validateDate(e.target.value)) {
-              updateAppoinemnt(appointment.uuid, { ...appointment, date: e.target.value });
+            setEmail(e.target.value);
+            setEmailError(false);
+
+            if (!validateEmail(e.target.value)) {
+              setEmailError(true);
             }
           }}
         />
@@ -64,16 +55,49 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         <input
           className="text-center"
           disabled={showEdit}
-          value={appointment.petInfo.name}
-          onChange={(e) => updateAppoinemnt(appointment.uuid, { ...appointment, petInfo: { ...appointment.petInfo, name: e.target.value } })}
+          value={phone}
+          placeholder={appointment.clientInfo.phone}
+          onChange={(e) => setPhone(e.target.value)}
         />
       </td>
       <td>
         <input
           className="text-center"
           disabled={showEdit}
-          value={appointment.petInfo.species}
-          onChange={(e) => updateAppoinemnt(appointment.uuid, { ...appointment, petInfo: { ...appointment.petInfo, species: e.target.value } })}
+          value={date}
+          placeholder={appointment.date}
+          onChange={(e) => {
+            setDate(e.target.value);
+          }}
+        />
+      </td>
+      <td>
+        <input
+          className="text-center"
+          disabled={showEdit}
+          value={time}
+          placeholder={appointment.time}
+          onChange={(e) => {
+            setTime(e.target.value);
+          }}
+        />
+      </td>
+      <td>
+        <input
+          className="text-center placeholder:text-black"
+          disabled={showEdit}
+          value={petName}
+          placeholder={appointment.petInfo.name}
+          onChange={(e) => setPetName(e.target.value)}
+        />
+      </td>
+      <td>
+        <input
+          className="text-center"
+          disabled={showEdit}
+          value={species}
+          placeholder={appointment.petInfo.species}
+          onChange={(e) => setSpecies(e.target.value)}
         />
       </td>
       <td>
@@ -81,7 +105,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
           className="text-center disabled:bg-inherit disabled:text-black"
           disabled={showEdit}
           defaultValue={appointment.clinician}
-          onChange={(e) => updateAppoinemnt(appointment.uuid, { ...appointment, clinician: e.target.value })}
+          onChange={(e) => setClinician(e.target.value)}
         >
           <option>John Doe</option>
           <option>Alice Smith</option>
@@ -91,11 +115,12 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         <input
           className="text-center"
           disabled={showEdit}
-          onChange={(e) => updateAppoinemnt(appointment.uuid, { ...appointment, clientInfo: { ...appointment.clientInfo, message: e.target.value } })}
-          value={appointment.clientInfo.message}
+          onChange={(e) => setMessage(e.target.value)}
+          value={message}
+          placeholder={appointment.clientInfo.message}
         />
         <div className="absolute left-0 top-full mt-1 hidden w-max max-w-xs p-2 bg-gray-700 text-white text-xs rounded shadow-lg group-hover:block">
-          {appointment.clientInfo.message}
+          {message || appointment.clientInfo.message}
         </div>
       </td>
       <td>
@@ -105,9 +130,9 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
           className="bg-inherit"
           onChange={(e) => {
             if (e.target.value === 'Approved') {
-              updateAppoinemnt(appointment.uuid, { ...appointment, approved: true });
+              setApproved(true);
             } else if (e.target.value === 'Pending') {
-              updateAppoinemnt(appointment.uuid, { ...appointment, approved: false });
+              setApproved(false);
             }
           }}
         >
@@ -115,19 +140,43 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
           <option>Approved</option>
         </select>
       </td>
-      <td>
+      <td className="flex flex-col items-center">
         <button
           className="btn btn-primary btn-sm"
+          disabled={emailError}
           onClick={() => {
             setShowEdit(!showEdit);
 
-            if (showEdit) {
-              updateAppoinemnt(appointment.uuid, appointment);
+            if (!showEdit && !emailError) {
+              updateAppoinemnt(appointment.uuid, { ...appointment, clientInfo: { ...appointment.clientInfo, name, email, phone, message }, clinician, date, time, petInfo: { name: petName, species }, approved });
             }
           }}
         >
           {!showEdit ? 'Save' : 'Edit'}
         </button>
+
+        {!showEdit && (
+          <td>
+            <button
+              className="btn btn-secondary btn-sm"
+              onClick={() => {
+                setShowEdit(!showEdit);
+                setClinician(appointment.clinician);
+                setApproved(appointment.approved);
+                setDate(appointment.date);
+                setTime(appointment.time);
+                setMessage(appointment.clientInfo.message);
+                setName(appointment.clientInfo.name);
+                setEmail(appointment.clientInfo.email);
+                setPhone(appointment.clientInfo.phone);
+                setPetName(appointment.petInfo.name);
+                setSpecies(appointment.petInfo.species);
+              }}
+            >
+              Cancel
+            </button>
+          </td>
+        )}
       </td>
       <td>
         <button

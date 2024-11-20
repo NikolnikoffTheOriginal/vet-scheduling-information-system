@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { validateEmail } from "../../utils/validateEmail";
 
 interface IFormData {
   name: string;
@@ -17,7 +18,7 @@ interface IPersonalInfo {
 
 export const PersonalInfo = ({ onFinalSubmit, onBackClick, formData, setFormData }: IPersonalInfo) => {
   const ref = useRef<HTMLTextAreaElement>(null);
-
+  const [emailError, setEmailError] = useState(false);
 
   const updateField = (field: keyof typeof formData, value: string) => {
     setFormData((prevData) => ({
@@ -56,25 +57,36 @@ export const PersonalInfo = ({ onFinalSubmit, onBackClick, formData, setFormData
           />
         </label>
 
-        <label className="input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70">
-            <path
-              d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
-            <path
-              d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
-          </svg>
-          <input
-            type="text"
-            className="grow bg-inherit"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) => updateField('email', e.target.value)}
-          />
-        </label>
+        <div>
+          <label className={`input ${emailError ? 'input-error' : 'input-bordered'} flex items-center gap-2`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              className="h-4 w-4 opacity-70">
+              <path
+                d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
+              <path
+                d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
+            </svg>
+            <input
+              type="text"
+              className="grow bg-inherit"
+              placeholder="Email"
+              value={formData.email}
+              onChange={(e) => {
+                updateField('email', e.target.value);
+                setEmailError(false);
+
+                if (!validateEmail(e.target.value)) {
+                  setEmailError(true);
+                }
+              }}
+            />
+          </label>
+          {emailError && <p className="text-xs text-error">Please enter a valid email address.</p>}
+        </div>
+
 
         <label className="input input-bordered flex items-center gap-2">
           <svg
@@ -130,7 +142,7 @@ export const PersonalInfo = ({ onFinalSubmit, onBackClick, formData, setFormData
       <button
         className="btn btn-primary text-lg w-full"
         onClick={onFinalSubmit}
-        disabled={Object.values(formData).every(value => value !== '') ? false : true}
+        disabled={Object.values(formData).every(value => value !== '') && !emailError ? false : true}
       >
         Submit
       </button>

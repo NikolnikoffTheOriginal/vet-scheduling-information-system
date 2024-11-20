@@ -138,7 +138,8 @@ export const AdminDashboard = () => {
                   <th>Client Name</th>
                   <th>Email</th>
                   <th>Phone number</th>
-                  <th>Date and Time</th>
+                  <th>Date</th>
+                  <th>Time</th>
                   <th>Pet Name</th>
                   <th>Species</th>
                   <th>Clinician</th>
