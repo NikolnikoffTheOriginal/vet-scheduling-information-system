@@ -89,6 +89,9 @@ export const AdminDashboard = () => {
         <Loader />
       ) : (
         <div className="p-2 flex-1">
+          <div className="bg-blue-500 text-gray-100 text-center py-3">
+            <h1 className="text-2xl font-bold">Patient Scheduling Information System</h1>
+          </div>
           <div className="navbar bg-base-300 flex items-center justify-between">
             <div className="flex items-center">
               <p className="text-xl font-bold">Admin Dashboard</p>
@@ -131,9 +134,9 @@ export const AdminDashboard = () => {
           ) : date && filterByDateAppointments.length === 0 ? (
             <p className="text-2xl flex justify-center items-center h-[90vh]">There are no appointments for this date.</p>
           ) : (
-            <table className="table">
+            <table className="table overflow-hidden border border-gray-300 rounded-lg shadow-lg table-auto w-full text-left">
               <thead>
-                <tr className="text-center">
+                <tr className="bg-purple-200 text-black text-center">
                   <th></th>
                   <th>Client Name</th>
                   <th>Email</th>

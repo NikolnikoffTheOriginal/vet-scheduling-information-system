@@ -24,7 +24,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
   const [species, setSpecies] = useState(appointment.petInfo.species);
 
   return (
-    <tr key={appointment.uuid} className="hover text-center">
+    <tr key={appointment.uuid} className="hover:bg-indigo-100 text-center">
       <th>{index + 1}</th>
       <td>
         <input
