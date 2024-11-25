@@ -119,7 +119,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
           value={message}
           placeholder={appointment.clientInfo.message}
         />
-        <div className="absolute left-0 top-full mt-1 hidden w-max max-w-xs p-2 bg-gray-700 text-white text-xs rounded shadow-lg group-hover:block">
+        <div className="absolute left-0 top-full mt-1 hidden w-max max-w-xs p-2 bg-gray-700 text-white text-xs rounded shadow-lg group-hover:block z-50 break-words">
           {message || appointment.clientInfo.message}
         </div>
       </td>

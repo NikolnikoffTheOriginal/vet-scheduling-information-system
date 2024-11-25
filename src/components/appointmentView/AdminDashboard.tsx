@@ -9,8 +9,8 @@ import { getFilteredAppointmentsOnChange } from "../../utils/getFilteredAppointm
 import { getValidAppointments } from "../../utils/getValidAppointments";
 import { Filter } from "../additionalComponents/Filter";
 import Calendar from "react-calendar";
-import { format } from "date-fns";
 import { AdminAppointmentView } from "./AdminAppointmentView";
+import { filterByDate } from "../../utils/filterByDate";
 
 
 export const AdminDashboard = () => {
@@ -25,16 +25,7 @@ export const AdminDashboard = () => {
   const originalAppointments = [...appointments];
   const validAppointments = getValidAppointments(getFilteredAppointmentsOnChange(filteringOption, originalAppointments));
 
-  const filterByDate = (appointment: IDatabase) => {
-    if (!date || !appointment) {
-      return;
-    }
-
-    const appointmentDate = new Date(`${appointment.date} ${appointment.time}`);
-    return format(appointmentDate, 'MMMM dd') === format(date, 'MMMM dd');
-  }
-
-  const filterByDateAppointments = validAppointments.filter(appointment => filterByDate(appointment));
+  const filterByDateAppointments = validAppointments.filter(appointment => filterByDate(appointment, date));
 
   const getAppointments = useCallback(() => {
     const appointmentsRef = ref(db, 'appointments');
