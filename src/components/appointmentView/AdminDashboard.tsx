@@ -161,7 +161,7 @@ export const AdminDashboard = () => {
         </div>
       )}
 
-      <footer>&copy; Mikael Nikolnikov Diploma Work 2024</footer>
+      <footer>&copy; Mikael Nikolnikov, ISCS, Diploma Work, 2024</footer>
     </div >
   );
 };

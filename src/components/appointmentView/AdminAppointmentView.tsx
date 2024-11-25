@@ -14,7 +14,6 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
   const [showEdit, setShowEdit] = useState(true);
   const [emailError, setEmailError] = useState(false);
   const [clinician, setClinician] = useState(appointment.clinician);
-  const [approved, setApproved] = useState(appointment.approved);
   const [date, setDate] = useState(appointment.date);
   const [time, setTime] = useState(appointment.time);
   const [message, setMessage] = useState(appointment.clientInfo.message);
@@ -132,10 +131,10 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
           className="bg-inherit"
           onChange={(e) => {
             if (e.target.value === 'Approved') {
-              setApproved(true);
+              updateAppoinemnt(appointment.uuid, { ...appointment, approved: true });
               sendEmail(appointment.clientInfo.name, appointment.clientInfo.email,appointment.date, appointment.time)
             } else if (e.target.value === 'Pending') {
-              setApproved(false);
+              updateAppoinemnt(appointment.uuid, { ...appointment, approved: false });
             }
           }}
         >
@@ -151,7 +150,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
             setShowEdit(!showEdit);
 
             if (!showEdit && !emailError) {
-              updateAppoinemnt(appointment.uuid, { ...appointment, clientInfo: { ...appointment.clientInfo, name, email, phone, message }, clinician, date, time, petInfo: { name: petName, species }, approved });
+              updateAppoinemnt(appointment.uuid, { ...appointment, clientInfo: { ...appointment.clientInfo, name, email, phone, message }, clinician, date, time, petInfo: { name: petName, species } });
             }
           }}
         >
@@ -165,7 +164,6 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
               onClick={() => {
                 setShowEdit(!showEdit);
                 setClinician(appointment.clinician);
-                setApproved(appointment.approved);
                 setDate(appointment.date);
                 setTime(appointment.time);
                 setMessage(appointment.clientInfo.message);
