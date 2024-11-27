@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { auth } from "../../firebase-config";
 import { useNavigate } from "react-router-dom";
 import { IDatabase } from "../../constants";
-import { ref, onValue, getDatabase } from "firebase/database";
+import { ref, onValue, getDatabase, set } from "firebase/database";
 import { useOnUserStateChange } from "../../hooks/useOnUserStateChange";
 import { getFilteredAppointmentsOnChange } from "../../utils/getFilteredAppointmentsOnChange";
 import { getValidAppointments } from "../../utils/getValidAppointments";
@@ -56,6 +56,10 @@ export const VetDashboard = () => {
   const handleDateChange = (value: Date | null) => {
     setDate(value);
     setShowCalendar(false);
+  };
+
+  const updateAppointment = (uuid: string, data: Partial<IDatabase>) => {
+    set(ref(db, 'appointments/' + uuid), data);
   };
 
   const tableRef = useRef<HTMLTableElement>(null);
@@ -126,13 +130,14 @@ export const VetDashboard = () => {
                 <th>Species</th>
                 <th>Clinician</th>
                 <th>Message</th>
+                <th>Doctor Note</th>
               </tr>
             </thead>
             <tbody>
               {date ? filterByDateAppointments.map((appointment, index) => (
-                <VetAppointmentView key={appointment.uuid} appointment={appointment} index={index} />
+                <VetAppointmentView key={appointment.uuid} appointment={appointment} index={index} updateAppointment={updateAppointment}/>
               )) : validAppointments.map((appointment, index) => (
-                <VetAppointmentView key={appointment.uuid} appointment={appointment} index={index} />
+                <VetAppointmentView key={appointment.uuid} appointment={appointment} index={index} updateAppointment={updateAppointment}/>
               ))}
             </tbody>
           </table>

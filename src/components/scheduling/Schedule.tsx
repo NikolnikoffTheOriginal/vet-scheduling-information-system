@@ -14,7 +14,7 @@ enum Page {
   'submit'
 }
 
-const writeToDataBase = ({ clientInfo, approved, clinician, date, petInfo, time, uuid }: IDatabase) => {
+const writeToDataBase = ({ clientInfo, approved, clinician, date, petInfo, time, uuid, doctorNote}: IDatabase) => {
   const db = getDatabase();
   const reference = ref(db, 'appointments/' + uuid);
 
@@ -26,6 +26,7 @@ const writeToDataBase = ({ clientInfo, approved, clinician, date, petInfo, time,
     clinician,
     approved,
     uuid,
+    doctorNote,
   });
 }
 
@@ -116,6 +117,7 @@ export const Schedule = () => {
                 },
                 time: dateTime.time!,
                 uuid,
+                doctorNote: '',
               });
             }}
             onBackClick={() => setPage(Page.date)}
