@@ -88,7 +88,7 @@ export const Authentication = () => {
             <input
               type="text"
               className="grow bg-inherit"
-              placeholder="Username"
+              placeholder="Email"
               onChange={(e) => {
                 setEmail(e.target.value);
                 setError(false);
@@ -153,7 +153,7 @@ export const Authentication = () => {
             <input
               type="text"
               className="grow bg-inherit"
-              placeholder="Username"
+              placeholder="Email"
               onChange={(e) => {
                 setEmail(e.target.value);
                 setError(false);
