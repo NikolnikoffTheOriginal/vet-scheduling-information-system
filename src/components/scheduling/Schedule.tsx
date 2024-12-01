@@ -7,6 +7,11 @@ import { getDatabase, ref, set } from "firebase/database";
 import { uid } from "uid";
 import { CLINICIANS, IDatabase, IDateTime } from "../../constants";
 
+import bg1 from '../../backgrounds/bg1.jpg';
+import bg2 from '../../backgrounds/bg2.jpg';
+import bg3 from '../../backgrounds/bg3.jpg';
+import bg4 from '../../backgrounds/bg4.jpg';
+
 enum Page {
   'client',
   'date',
@@ -57,10 +62,10 @@ export const Schedule = () => {
 
   useEffect(() => {
     const images = [
-      'src/backgrounds/bg1.jpg',
-      'src/backgrounds/bg2.jpg',
-      'src/backgrounds/bg3.jpg',
-      'src/backgrounds/bg4.jpg',
+      bg1,
+      bg2,
+      bg3,
+      bg4,
     ];
 
     const randomIndex = Math.floor(Math.random() * images.length);
