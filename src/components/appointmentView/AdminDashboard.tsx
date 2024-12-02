@@ -59,10 +59,16 @@ export const AdminDashboard = () => {
   };
 
   const deleteFromDataBase = (uuid: string) => {
+    setAppointments((prevAppointments) =>
+      prevAppointments.filter((appointment) => appointment.uuid !== uuid)
+    );
+  
     remove(ref(db, 'appointments/' + uuid))
-      .then(() => getAppointments())
-  }
-
+      .then(() => {
+        getAppointments();
+      })
+  };
+  
   const updateAppoinemnt = (uuid: string, data: Partial<IDatabase>) => {
     set(ref(db, 'appointments/' + uuid), data);
   }
