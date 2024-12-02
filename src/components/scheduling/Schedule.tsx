@@ -133,7 +133,7 @@ export const Schedule = () => {
 
         {page === Page.submit && <SubmitWindow />}
       </div>
-      <footer className="text-black text-center py-4 mt-auto">&copy; Mikael Nikolnikov, ISCS, Diploma Work, 2024</footer>
+      <footer className="text-white text-center py-4 mt-auto">&copy; Mikael Nikolnikov, ISCS, Diploma Work, 2024</footer>
 
     </div>
   )
