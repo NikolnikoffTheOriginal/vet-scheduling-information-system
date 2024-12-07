@@ -20,10 +20,12 @@ export const AdminDashboard = () => {
   const [filteringOption, setFilteringOption] = useState('none');
   const [showCalendar, setShowCalendar] = useState(false);
   const [date, setDate] = useState<Date | null>(null);
+  const [showStatistics, setShowStatistics] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   const originalAppointments = [...appointments];
   const validAppointments = getValidAppointments(getFilteredAppointmentsOnChange(filteringOption, originalAppointments));
-
   const filterByDateAppointments = validAppointments.filter(appointment => filterByDate(appointment, date));
 
   const getAppointments = useCallback(() => {
@@ -38,7 +40,7 @@ export const AdminDashboard = () => {
         })).sort((a, b) => {
           const dateA = new Date(`${a.date} ${a.time}`);
           const dateB = new Date(`${b.date} ${b.time}`);
-
+          
           return dateA.getTime() - dateB.getTime();
         });
 
@@ -81,6 +83,27 @@ export const AdminDashboard = () => {
   const tableRef = useRef<HTMLTableElement>(null);
   const print = useReactToPrint({ contentRef: tableRef });
 
+  // Calculate statistics
+  const totalAppointments = appointments.length;
+  const approvedAppointments = appointments.filter(appointment => appointment.approved).length;
+  const pendingAppointments = totalAppointments - approvedAppointments;
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowStatistics(false);
+      }
+      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+        setShowCalendar(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef, calendarRef]);
+
   return (
     <div className="bg-base-200 min-h-screen flex flex-col">
       <div className="p-2 flex-1">
@@ -92,8 +115,19 @@ export const AdminDashboard = () => {
             <p className="text-xl font-bold">Admin Dashboard</p>
             <button className="btn btn-primary text-lg ml-2" onClick={signOut}>Log out</button>
             <button className="btn btn-secondary text-lg ml-2" onClick={() => print()}>Print</button>
+            <div className="relative" ref={dropdownRef}>
+              <button className="btn btn-info text-lg ml-2" onClick={() => setShowStatistics(!showStatistics)}>{`${showStatistics ? 'Hide' : 'Show'} Statistics`}</button>
+              {showStatistics && (
+                <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-50">
+                  <h2 className="text-xl font-bold mb-2">Statistics</h2>
+                  <p>Total Appointments: {totalAppointments}</p>
+                  <p>Approved Appointments: {approvedAppointments}</p>
+                  <p>Pending Appointments: {pendingAppointments}</p>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="relative gap-3 flex items-center">
+          <div className="relative gap-3 flex items-center" ref={calendarRef}>
             <p className="font-bold">Choose date to filter:</p>
             <input
               type="text"
