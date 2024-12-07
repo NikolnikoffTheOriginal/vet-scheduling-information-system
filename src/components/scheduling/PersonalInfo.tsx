@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { validateEmail } from "../../utils/validateEmail";
 import { Link } from "react-router-dom";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 interface IFormData {
   name: string;
@@ -21,6 +22,7 @@ interface IPersonalInfo {
 export const PersonalInfo = ({ onFinalSubmit, onBackClick, formData, setFormData }: IPersonalInfo) => {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [emailError, setEmailError] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
   const [privacyPolicy, setPrivacyPolicy] = useState(false);
   const [captcha, setCaptcha] = useState(false);
 
@@ -110,27 +112,36 @@ export const PersonalInfo = ({ onFinalSubmit, onBackClick, formData, setFormData
           />
         </label>
 
-        <label className="input input-bordered flex items-center gap-2">
-          <svg
-            viewBox="0 0 32 32"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70">
-            <g transform="translate(-258.000000, -309.000000)" fill="currentColor">
-              <path
-                d="M289.073,313.433 L286.195,310.563 C285.401,309.77 284.112,309.77 283.317,310.563 L279,316.303 C278.341,317.274 278.206,318.38 279,319.173 L280.762,320.93 C279.456,322.68 277.888,324.588 276.123,326.348 C274.127,328.338 271.907,330.147 269.911,331.633 L268.208,329.936 C267.414,329.143 266.305,329.277 265.33,329.936 L259.574,334.241 C258.609,334.906 258.779,336.318 259.574,337.111 L262.452,339.98 C264.042,341.566 266.109,341.058 268.208,339.98 C268.208,339.98 274.561,336.424 280,331 C285.116,325.898 289.073,319.173 289.073,319.173 C289.898,316.91 290.663,315.018 289.073,313.433" id="phone">
-              </path>
-            </g>
-          </svg>
-          <input
-            type="text"
-            className="grow bg-inherit"
-            placeholder="Phone number"
-            value={formData.phoneNumber}
-            onChange={(e) => updateField('phoneNumber', e.target.value)}
-          />
-        </label>
+        <div>
+          <label className={`input ${phoneError ? 'input-error' : 'input-bordered'} flex items-center gap-2`}>
+            <svg
+              viewBox="0 0 32 32"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              className="h-4 w-4 opacity-70">
+              <g transform="translate(-258.000000, -309.000000)" fill="currentColor">
+                <path
+                  d="M289.073,313.433 L286.195,310.563 C285.401,309.77 284.112,309.77 283.317,310.563 L279,316.303 C278.341,317.274 278.206,318.38 279,319.173 L280.762,320.93 C279.456,322.68 277.888,324.588 276.123,326.348 C274.127,328.338 271.907,330.147 269.911,331.633 L268.208,329.936 C267.414,329.143 266.305,329.277 265.33,329.936 L259.574,334.241 C258.609,334.906 258.779,336.318 259.574,337.111 L262.452,339.98 C264.042,341.566 266.109,341.058 268.208,339.98 C268.208,339.98 274.561,336.424 280,331 C285.116,325.898 289.073,319.173 289.073,319.173 C289.898,316.91 290.663,315.018 289.073,313.433" id="phone">
+                </path>
+              </g>
+            </svg>
+            <input
+              type="text"
+              className="grow bg-inherit"
+              placeholder="Phone number"
+              value={formData.phoneNumber}
+              onChange={(e) => {
+                updateField('phoneNumber', e.target.value);
+                setPhoneError(false);
 
+                if (!isValidPhoneNumber(e.target.value)) {
+                  setPhoneError(true);
+                }
+              }}
+            />
+          </label>
+          {phoneError && <p className="text-xs text-error">Please enter a valid phone number.</p>}
+        </div>
       </div>
 
       <textarea
@@ -144,10 +155,10 @@ export const PersonalInfo = ({ onFinalSubmit, onBackClick, formData, setFormData
       ></textarea>
 
       <div className="flex gap-1">
-        <input type="checkbox" className="checkbox" onClick={() => setPrivacyPolicy(!privacyPolicy)}/>I HAVE READ AND AGREED TO <Link to={'/privacyPolicy'} target="_blank" rel="noopener noreferrer" className="text-blue-400">PRIVACY POLICY</Link>
+        <input type="checkbox" className="checkbox" onClick={() => setPrivacyPolicy(!privacyPolicy)} />I HAVE READ AND AGREED TO <Link to={'/privacyPolicy'} target="_blank" rel="noopener noreferrer" className="text-blue-400">PRIVACY POLICY</Link>
       </div>
 
-       <ReCAPTCHA
+      <ReCAPTCHA
         sitekey="6LeoJIUqAAAAAJVm5TbnBi-VWactqNkBVjm6rL9t"
         onChange={() => setCaptcha(true)}
       />
@@ -155,7 +166,7 @@ export const PersonalInfo = ({ onFinalSubmit, onBackClick, formData, setFormData
       <button
         className="btn btn-primary text-lg w-full"
         onClick={onFinalSubmit}
-        disabled={Object.values(formData).every(value => value !== '') && !emailError && privacyPolicy && captcha ? false : true}
+        disabled={Object.values(formData).every(value => value !== '') && !emailError && !phoneError && privacyPolicy && captcha ? false : true}
       >
         Submit
       </button>

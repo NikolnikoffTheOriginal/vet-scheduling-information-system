@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IDatabase } from "../../constants";
 import { validateEmail } from "../../utils/validateEmail";
 import { sendEmail } from "../../utils/sendEmail";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 interface IAdminAppointmentView {
   appointment: IDatabase;
@@ -13,6 +14,7 @@ interface IAdminAppointmentView {
 export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAppoinemnt, index }: IAdminAppointmentView) => {
   const [showEdit, setShowEdit] = useState(true);
   const [emailError, setEmailError] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
   const [clinician, setClinician] = useState(appointment.clinician);
   const [date, setDate] = useState(appointment.date);
   const [time, setTime] = useState(appointment.time);
@@ -57,15 +59,24 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
               }
             }}
           />
+          {emailError && <p className="text-xs text-error">Please enter a valid email address.</p>}
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className="text-center"
+            className={`text-center ${phoneError ? 'input-error' : ''}`}
             disabled={showEdit}
             value={phone}
             placeholder={appointment.clientInfo.phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => {
+              setPhone(e.target.value);
+              setPhoneError(false);
+
+              if (!isValidPhoneNumber(e.target.value)) {
+                setPhoneError(true);
+              }
+            }}
           />
+          {phoneError && <p className="text-xs text-error">Please enter a valid phone number.</p>}
         </td>
         <td className="whitespace-normal break-words">
           <input
@@ -152,11 +163,11 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         <td className="flex flex-col items-center">
           <button
             className="btn btn-primary btn-sm"
-            disabled={emailError}
+            disabled={emailError || phoneError}
             onClick={() => {
               setShowEdit(!showEdit);
 
-              if (!showEdit && !emailError) {
+              if (!showEdit && !emailError && !phoneError) {
                 updateAppoinemnt(appointment.uuid, { ...appointment, clientInfo: { ...appointment.clientInfo, name, email, phone, message }, clinician, date, time, petInfo: { name: petName, species } });
               }
             }}
