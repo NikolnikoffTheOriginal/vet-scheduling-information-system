@@ -62,13 +62,13 @@ export const AdminDashboard = () => {
     setAppointments((prevAppointments) =>
       prevAppointments.filter((appointment) => appointment.uuid !== uuid)
     );
-  
+
     remove(ref(db, 'appointments/' + uuid))
       .then(() => {
         getAppointments();
       })
   };
-  
+
   const updateAppoinemnt = (uuid: string, data: Partial<IDatabase>) => {
     set(ref(db, 'appointments/' + uuid), data);
   }
@@ -90,14 +90,8 @@ export const AdminDashboard = () => {
         <div className="navbar bg-base-300 flex items-center justify-between">
           <div className="flex items-center">
             <p className="text-xl font-bold">Admin Dashboard</p>
-            <button
-              className="btn btn-primary text-lg ml-2"
-              onClick={signOut}
-            >Log out</button>
-            <button
-              className="btn btn-secondary text-lg ml-2"
-              onClick={() => print()}
-            >Print</button>
+            <button className="btn btn-primary text-lg ml-2" onClick={signOut}>Log out</button>
+            <button className="btn btn-secondary text-lg ml-2" onClick={() => print()}>Print</button>
           </div>
           <div className="relative gap-3 flex items-center">
             <p className="font-bold">Choose date to filter:</p>
@@ -109,9 +103,7 @@ export const AdminDashboard = () => {
               className="border p-2 rounded"
               placeholder="Select a date"
             />
-
             <button className="btn btn-primary" onClick={() => handleDateChange(null)}>Clear</button>
-
             {showCalendar && (
               <div className="absolute z-10 top-12">
                 <Calendar
@@ -133,36 +125,37 @@ export const AdminDashboard = () => {
         ) : date && filterByDateAppointments.length === 0 ? (
           <p className="text-2xl flex justify-center items-center h-[90vh]">There are no appointments for this date.</p>
         ) : (
-          <table className="table overflow-hidden border border-gray-300 rounded-lg shadow-lg table-auto w-full text-left" ref={tableRef}>
-            <thead>
-              <tr className="bg-purple-200 text-black text-center">
-                <th></th>
-                <th>Client Name</th>
-                <th>Email</th>
-                <th>Phone number</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Pet Name</th>
-                <th>Species</th>
-                <th>Clinician</th>
-                <th>Message</th>
-                <th>Status</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {date ? filterByDateAppointments.map((appointment, index) => (
-                <AdminAppointmentView key={appointment.uuid} appointment={appointment} deleteFromDataBase={deleteFromDataBase} updateAppoinemnt={updateAppoinemnt} index={index} />
-              )) : validAppointments.map((appointment, index) => (
-                <AdminAppointmentView key={appointment.uuid} appointment={appointment} deleteFromDataBase={deleteFromDataBase} updateAppoinemnt={updateAppoinemnt} index={index} />
-              ))}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className="table border border-gray-300 overflow-hidden rounded-lg shadow-lg table-auto w-full text-left" ref={tableRef}>
+              <thead>
+                <tr className="bg-purple-200 text-black text-center">
+                  <th></th>
+                  <th>Client Name</th>
+                  <th>Email</th>
+                  <th>Phone number</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Pet Name</th>
+                  <th>Species</th>
+                  <th>Clinician</th>
+                  <th>Message</th>
+                  <th>Status</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {date ? filterByDateAppointments.map((appointment, index) => (
+                  <AdminAppointmentView key={appointment.uuid} appointment={appointment} deleteFromDataBase={deleteFromDataBase} updateAppoinemnt={updateAppoinemnt} index={index} />
+                )) : validAppointments.map((appointment, index) => (
+                  <AdminAppointmentView key={appointment.uuid} appointment={appointment} deleteFromDataBase={deleteFromDataBase} updateAppoinemnt={updateAppoinemnt} index={index} />
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
-
       <footer>&copy; Mikael Nikolnikov, ISCS, Diploma Work, 2024</footer>
-    </div >
+    </div>
   );
 };
