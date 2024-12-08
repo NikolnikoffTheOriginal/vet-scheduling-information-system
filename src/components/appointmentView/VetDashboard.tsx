@@ -109,7 +109,7 @@ export const VetDashboard = () => {
             )}
           </div>
           <div className="gap-2">
-            <Filter setFilteringOption={setFilteringOption} isNotApproveNeeded={true} />
+            <Filter setFilteringOption={setFilteringOption} isNotApproveNeeded={false} />
           </div>
         </div>
         {validAppointments.length === 0 && !date ? (

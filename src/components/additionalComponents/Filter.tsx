@@ -18,7 +18,7 @@ export const Filter = ({ setFilteringOption, isNotApproveNeeded }: IFilter) => (
       <option>dog</option>
       <option>cat</option>
       <option>other pet species</option>
-      <option>approved</option>
+      {isNotApproveNeeded ? <option>approved</option> : ''}
       {isNotApproveNeeded ? <option>not approved</option> : ''}
     </select>
     <button
