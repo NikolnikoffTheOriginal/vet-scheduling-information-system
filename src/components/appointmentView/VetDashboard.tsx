@@ -68,16 +68,15 @@ export const VetDashboard = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="p-2 flex-1">
-        <div className="bg-blue-500 text-gray-100 text-center py-3">
+      <div className="bg-blue-500 text-gray-100 py-3 flex justify-between items-center pr-3 pl-3">
           <h1 className="text-2xl font-bold">Patient Scheduling Information System</h1>
+          <div className="flex gap-2 items-center">
+            <p className="text-xl font-bold">Vet Dashboard</p>
+            <button className="btn btn-primary text-lg ml-2" onClick={signOut}>Log out</button>
+          </div>
         </div>
         <div className="navbar bg-base-300 flex items-center justify-between">
           <div className="flex items-center">
-            <p className="text-xl font-bold">Vet Dashboard</p>
-            <button
-              className="btn btn-primary text-lg ml-2"
-              onClick={signOut}
-            >Log out</button>
             <button
               className="btn btn-secondary text-lg ml-2"
               onClick={() => print()}
