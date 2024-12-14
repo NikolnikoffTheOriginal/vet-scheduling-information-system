@@ -1,4 +1,4 @@
-import { add, format } from "date-fns";
+import { add, format, parse } from "date-fns";
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import { STARTING_WORKING_HOUR, CLOSING_WORKING_HOUR, APPOINTMENT_DURATION, IDateTime, IDatabase } from "../../constants";
@@ -40,8 +40,10 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
     }
 
     const { date } = dateTime;
-    const startingHour = add(date, { hours: STARTING_WORKING_HOUR });
-    const closingHour = add(date, { hours: CLOSING_WORKING_HOUR });
+
+    const parsedDate = parse(date, 'dd/MM/yyyy', new Date());
+    const startingHour = add(parsedDate, { hours: STARTING_WORKING_HOUR });
+    const closingHour = add(parsedDate, { hours: CLOSING_WORKING_HOUR });
 
     const timeSlots = [];
     for (let i = startingHour; i < closingHour; i = add(i, { minutes: APPOINTMENT_DURATION })) {
@@ -56,7 +58,7 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
   const getBookedTimeSlots = () => appointments.filter(appointment => appointment.date === dateTime.date).map(appointment => appointment.time);
   const getIfTimePassed = () => {
     const existingTimeSlots = timeSlots && timeSlots.filter(timeSlot => format(timeSlot, 'kk:mm') < format(new Date(), 'kk:mm'));
-    const currentDate = format(new Date(), 'MMMM dd');
+    const currentDate = format(new Date(), 'dd/MM/yyyy');
     return { existingTimeSlots, currentDate };
   };
 
@@ -72,7 +74,8 @@ export const CalendarDate = ({ onNextClick, onBackClick, dateTime, setDateTime }
         minDate={new Date()}
         view='month'
         onClickDay={(date) => {
-          setDateTime((prev: IDateTime) => ({ ...prev, date: format(date, 'MMMM dd'), time: null }));
+          setDateTime((prev: IDateTime) => ({ ...prev, date: format(date, 'dd/MM/yyyy'), time: null }));
+          console.log(dateTime.date);
           setActiveDate(true);
           setActiveTime({ activeTime: false, index: 0 });
         }}

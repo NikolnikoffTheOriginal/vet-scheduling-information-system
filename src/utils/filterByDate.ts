@@ -6,6 +6,5 @@ export const filterByDate = (appointment: IDatabase, date: Date | null) => {
     return;
   }
 
-  const appointmentDate = new Date(`${appointment.date} ${appointment.time}`);
-  return format(appointmentDate, 'MMMM dd') === format(date, 'MMMM dd');
+  return appointment.date === format(date, 'dd/MM/yyyy');
 }
