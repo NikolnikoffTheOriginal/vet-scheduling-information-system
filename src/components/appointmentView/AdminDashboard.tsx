@@ -11,6 +11,7 @@ import Calendar from "react-calendar";
 import { AdminAppointmentView } from "./AdminAppointmentView";
 import { filterByDate } from "../../utils/filterByDate";
 import { useReactToPrint } from "react-to-print";
+import { format, parse } from "date-fns";
 
 
 export const AdminDashboard = () => {
@@ -32,20 +33,32 @@ export const AdminDashboard = () => {
     const appointmentsRef = ref(db, 'appointments');
     onValue(appointmentsRef, snapshot => {
       const data = snapshot.val();
-
+      
       if (data) {
-        const appointments = Object.entries(data).map(([uuid, appointmentData]) => ({
-          ...appointmentData as IDatabase,
-          uuid,
-        })).sort((a, b) => {
-          const dateA = new Date(`${a.date} ${a.time}`);
-          const dateB = new Date(`${b.date} ${b.time}`);
-
-          return dateA.getTime() - dateB.getTime();
-        });
-
-        setAppointments(appointments);
+        try {
+          const appointments = Object.entries(data).map(([uuid, appointmentData]) => ({
+            ...appointmentData as IDatabase,
+            uuid,
+          })).sort((a, b) => {
+            const dateA = new Date(`${format(parse(a.date, 'dd/MM/yyyy', new Date()), 'yyyy-MM-dd')} ${a.time}`);
+            const dateB = new Date(`${format(parse(b.date, 'dd/MM/yyyy', new Date()), 'yyyy-MM-dd')} ${b.time}`);
+            
+            if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+              throw new Error('Invalid date format');
+            }
+  
+            return dateA.getTime() - dateB.getTime();
+          });
+  
+          setAppointments(appointments);
+        } catch (error) {
+          console.error('Error processing appointments:', error);
+        }
+      } else {
+        console.warn('No data found');
       }
+    }, (error) => {
+      console.error('Error fetching appointments:', error);
     });
   }, [db]);
 
