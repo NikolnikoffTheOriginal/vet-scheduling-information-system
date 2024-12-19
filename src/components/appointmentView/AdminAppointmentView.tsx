@@ -181,6 +181,8 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
                 className="btn btn-secondary btn-sm"
                 onClick={() => {
                   setShowEdit(!showEdit);
+                  setEmailError(false);
+                  setPhoneError(false);
                   setClinician(appointment.clinician);
                   setDate(appointment.date);
                   setTime(appointment.time);
