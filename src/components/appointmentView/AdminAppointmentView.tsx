@@ -37,7 +37,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         <th>{index + 1}</th>
         <td className="whitespace-normal break-words">
           <input
-            className="text-center"
+            className="bg-inherit text-center"
             disabled={showEdit}
             value={name}
             placeholder={appointment.clientInfo.name}
@@ -46,7 +46,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className={`text-center ${emailError ? 'input-error' : ''}`}
+            className={`bg-inherit text-center ${emailError ? 'input-error' : ''}`}
             disabled={showEdit}
             value={email}
             placeholder={appointment.clientInfo.email}
@@ -63,7 +63,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className={`text-center ${phoneError ? 'input-error' : ''}`}
+            className={`bg-inherit text-center ${phoneError ? 'input-error' : ''}`}
             disabled={showEdit}
             value={phone}
             placeholder={appointment.clientInfo.phone}
@@ -80,7 +80,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className="text-center"
+            className="bg-inherit text-center"
             disabled={showEdit}
             value={date}
             placeholder={appointment.date}
@@ -91,7 +91,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className="text-center"
+            className="bg-inherit text-center"
             disabled={showEdit}
             value={time}
             placeholder={appointment.time}
@@ -102,7 +102,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className="text-center placeholder:text-black"
+            className="bg-inherit text-center placeholder:text-black"
             disabled={showEdit}
             value={petName}
             placeholder={appointment.petInfo.name}
@@ -111,7 +111,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className="text-center"
+            className="bg-inherit text-center"
             disabled={showEdit}
             value={species}
             placeholder={appointment.petInfo.species}
@@ -120,7 +120,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <select
-            className="text-center disabled:bg-inherit disabled:text-black"
+            className="bg-inherit text-center disabled:bg-inherit disabled:text-black"
             disabled={showEdit}
             defaultValue={appointment.clinician}
             onChange={(e) => setClinician(e.target.value)}
@@ -131,7 +131,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="relative group">
           <input
-            className="text-center"
+            className="bg-inherit text-center"
             disabled={showEdit}
             onChange={(e) => setMessage(e.target.value)}
             value={message}

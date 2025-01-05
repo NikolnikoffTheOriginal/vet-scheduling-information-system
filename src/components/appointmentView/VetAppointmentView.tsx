@@ -23,34 +23,34 @@ export const VetAppointmentView = ({
   return (
     <tr key={appointment.uuid} className="hover:bg-indigo-100 text-center">
       <th>{index + 1}</th>
-      <td className="break-words whitespace-normal max-w-sm">
+      <td className="break-words whitespace-normal max-w-sm bg-inherit">
         {appointment.clientInfo.name}
       </td>
-      <td className="break-words whitespace-normal max-w-sm">
+      <td className="break-words whitespace-normal max-w-sm bg-inherit">
         {appointment.clientInfo.email}
       </td>
-      <td className="break-words whitespace-normal max-w-sm">
+      <td className="break-words whitespace-normal max-w-sm bg-inherit">
         {appointment.clientInfo.phone}
       </td>
-      <td className="break-words whitespace-normal max-w-sm">
+      <td className="break-words whitespace-normal max-w-sm bg-inherit">
         {appointment.date}
       </td>
-      <td className="break-words whitespace-normal max-w-sm">
+      <td className="break-words whitespace-normal max-w-sm bg-inherit">
         {appointment.time}
       </td>
-      <td className="break-words whitespace-normal max-w-sm">
+      <td className="break-words whitespace-normal max-w-sm bg-inherit">
         {appointment.petInfo.name}
       </td>
-      <td className="break-words whitespace-normal max-w-sm">
+      <td className="break-words whitespace-normal max-w-sm bg-inherit">
         {appointment.petInfo.species}
       </td>
-      <td className="break-words whitespace-normal max-w-sm">
+      <td className="break-words whitespace-normal max-w-sm bg-inherit">
         {appointment.clinician}
       </td>
-      <td className="break-words whitespace-normal max-w-sm">
+      <td className="break-words whitespace-normal max-w-sm bg-inherit">
         {appointment.clientInfo.message}
       </td>
-      <td className="break-words whitespace-normal max-w-sm">
+      <td className="break-words whitespace-normal max-w-sm bg-inherit">
         {isEditing ? (
           <textarea
             className="w-full p-2 border border-gray-300 rounded"
