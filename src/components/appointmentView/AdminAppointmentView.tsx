@@ -37,7 +37,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         <th>{index + 1}</th>
         <td className="whitespace-normal break-words">
           <input
-            className="hover:bg-indigo-100 text-center"
+            className="text-center"
             disabled={showEdit}
             value={name}
             placeholder={appointment.clientInfo.name}
@@ -46,7 +46,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className={`hover:bg-indigo-100 text-center ${emailError ? 'input-error' : ''}`}
+            className={`text-center ${emailError ? 'input-error' : ''}`}
             disabled={showEdit}
             value={email}
             placeholder={appointment.clientInfo.email}
@@ -63,7 +63,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className={`hover:bg-indigo-100 text-center ${phoneError ? 'input-error' : ''}`}
+            className={`text-center ${phoneError ? 'input-error' : ''}`}
             disabled={showEdit}
             value={phone}
             placeholder={appointment.clientInfo.phone}
@@ -80,7 +80,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className="hover:bg-indigo-100 text-center"
+            className="text-center"
             disabled={showEdit}
             value={date}
             placeholder={appointment.date}
@@ -91,7 +91,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className="hover:bg-indigo-100 text-center"
+            className="text-center"
             disabled={showEdit}
             value={time}
             placeholder={appointment.time}
@@ -102,7 +102,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className="hover:bg-indigo-100 text-center placeholder:text-black"
+            className="text-center placeholder:text-black"
             disabled={showEdit}
             value={petName}
             placeholder={appointment.petInfo.name}
@@ -111,7 +111,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="whitespace-normal break-words">
           <input
-            className="hover:bg-indigo-100 text-center"
+            className="text-center"
             disabled={showEdit}
             value={species}
             placeholder={appointment.petInfo.species}
@@ -131,7 +131,7 @@ export const AdminAppointmentView = ({ appointment, deleteFromDataBase, updateAp
         </td>
         <td className="relative group">
           <input
-            className="hover:bg-indigo-100 text-center"
+            className="text-center"
             disabled={showEdit}
             onChange={(e) => setMessage(e.target.value)}
             value={message}

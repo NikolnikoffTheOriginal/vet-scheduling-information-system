@@ -23,34 +23,34 @@ export const VetAppointmentView = ({
   return (
     <tr key={appointment.uuid} className="hover:bg-indigo-100 text-center">
       <th>{index + 1}</th>
-      <td className="break-words whitespace-normal max-w-sm hover:bg-inherit">
+      <td className="break-words whitespace-normal max-w-sm">
         {appointment.clientInfo.name}
       </td>
-      <td className="break-words whitespace-normal max-w-sm hover:bg-inherit">
+      <td className="break-words whitespace-normal max-w-sm">
         {appointment.clientInfo.email}
       </td>
-      <td className="break-words whitespace-normal max-w-sm hover:bg-inherit">
+      <td className="break-words whitespace-normal max-w-sm">
         {appointment.clientInfo.phone}
       </td>
-      <td className="break-words whitespace-normal max-w-sm hover:bg-inherit">
+      <td className="break-words whitespace-normal max-w-sm">
         {appointment.date}
       </td>
-      <td className="break-words whitespace-normal max-w-sm hover:bg-inherit">
+      <td className="break-words whitespace-normal max-w-sm">
         {appointment.time}
       </td>
-      <td className="break-words whitespace-normal max-w-sm hover:bg-inherit">
+      <td className="break-words whitespace-normal max-w-sm">
         {appointment.petInfo.name}
       </td>
-      <td className="break-words whitespace-normal max-w-sm hover:bg-inherit">
+      <td className="break-words whitespace-normal max-w-sm">
         {appointment.petInfo.species}
       </td>
-      <td className="break-words whitespace-normal max-w-sm hover:bg-inherit">
+      <td className="break-words whitespace-normal max-w-sm">
         {appointment.clinician}
       </td>
-      <td className="break-words whitespace-normal max-w-sm hover:bg-inherit">
+      <td className="break-words whitespace-normal max-w-sm">
         {appointment.clientInfo.message}
       </td>
-      <td className="break-words whitespace-normal max-w-sm hover:bg-inherit">
+      <td className="break-words whitespace-normal max-w-sm">
         {isEditing ? (
           <textarea
             className="w-full p-2 border border-gray-300 rounded"
