@@ -12,7 +12,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: false
 
 jobs:
@@ -36,13 +36,11 @@ jobs:
         env:
           CI: true
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: "./dist"
+          name: github-pages
+          path: ./dist
 
   deploy:
     environment:
@@ -51,9 +49,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Setup pages
+        uses: actions/configure-pages@v4
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
 
   build_and_analyze:
     name: Build and analyze
